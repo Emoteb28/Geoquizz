@@ -47,7 +47,7 @@ $config = [
         'notFoundHandler' => function($c) {
             return function ($req, $resp) use ($c) {
              
-                return \lbs\errors\NotFound::error($req, $resp);
+                return \gq\errors\NotFound::error($req, $resp);
 
             };
         },
@@ -60,7 +60,7 @@ $config = [
         'notAllowedHandler' => function($c) {
             return function (  $req,  $resp, $methods) {
                 
-                return \lbs\errors\NotFound::error($req, $resp, $methods);
+                return \gq\errors\NotFound::error($req, $resp, $methods);
 
             };
         },
@@ -73,7 +73,7 @@ $config = [
         'badRequestHandler' => function($c) {
             return function (  $req,  $resp) {
                 
-                return \lbs\errors\NotFound::error($req, $resp);
+                return \gq\errors\NotFound::error($req, $resp);
 
             };
         },
@@ -87,7 +87,7 @@ $config = [
         'errorHandler' => function ($c) {
             return function ($req, $resp, $exception) use ($c) {
                   
-                return \lbs\errors\NotFound::error($req, $resp, $exception);
+                return \gq\errors\NotFound::error($req, $resp, $exception);
 
             };
         },
@@ -96,7 +96,7 @@ $config = [
          * Auth
          */
         'auth' => function ($container) {
-            return new \lbs\auth\Auth;
+            return new \gq\auth\Auth;
         },
         /**
          * CSRF :cross-site request forgery

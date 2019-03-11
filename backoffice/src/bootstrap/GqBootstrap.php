@@ -1,10 +1,10 @@
 <?php
-namespace lbs\bootstrap;
+namespace gq\bootstrap;
 
    /**
     * Classe LbsBootstrap qui permet d'instancier la connexion pour notre application
     */
-class LbsBootstrap {
+class GqBootstrap {
     
        /**
         * Fonction startEloquent

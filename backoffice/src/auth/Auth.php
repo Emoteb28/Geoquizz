@@ -1,7 +1,7 @@
 <?php
-namespace lbs\auth;
+namespace gq\auth;
 
-use lbs\models\Staff;
+use gq\models\User;
 
 /**
  * Classe Auth

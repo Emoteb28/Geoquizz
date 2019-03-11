@@ -1,6 +1,6 @@
 <?php
-namespace lbs\middlewares;
-use lbs\controllers\Controller;
+namespace gq\middlewares;
+use gq\controllers\Controller;
 
 /**
  * Classe Cors extends de la classe Controller
