@@ -13,15 +13,7 @@ $container = new \Slim\Container(require_once __DIR__ . "/../src/conf/config.php
 
 $app = new \Slim\App($container);
 
-\lbs\bootstrap\LbsBootstrap::startEloquent($container->settings['config']);
-
-
-/**
- * CSRF :cross-site request forgery
- */
-$app->add(new \lbs\middlewares\Csrf($container));
-
-$app->add($container->csrf);
+\gq\bootstrap\GqBootstrap::startEloquent($container->settings['config']);
 
 
 /**
@@ -31,156 +23,192 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
   return $response;
 });
 
-$app->add(\lbs\middlewares\Cors::class . ':checkAndAddCorsHeaders');
+$app->add(\gq\middlewares\Cors::class . ':checkAndAddCorsHeaders');
 
 
 /**
- * Catégorie
- * Toutes les catégories
+ * series
+ * Toutes les series
  */
 
-$app->get('/categories[/]',
+/* $app->get('/series[/]',
 
-    \lbs\controllers\CategorieController::class . ':getCategories'
+    \gq\controllers\SerieController::class . ':getSeries'
 
+); */
+
+/**
+ * Compte user
+ */
+
+/**
+ * Création du compte d'utilisateur
+ */
+
+$app->post('/register[/]',
+
+    \gq\controllers\UserController::class . ':createUser'
+
+);
+
+/**
+ * Connexion user
+ */
+
+$app->post('/login[/]',
+
+    \gq\controllers\UserController::class . ':loginUser'
+
+);
+
+/**
+ * Recupération des informations user
+ */
+
+$app->get('/users/{id}[/]',
+
+    \gq\controllers\UserController::class . ':getUser'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
 );
 
 
 /**
  * Catégorie par ID
  */
-$app->get('/categories/{id}[/]',
+/* $app->get('/categories/{id}[/]',
 
     \lbs\controllers\CategorieController::class . ':getCategorie'
 );
-
+ */
 
 /**
  * Retourne les catégories d'un sandwich
  */
 
 
-$app->get('/sandwichs/{id}/categories[/]',
+/* $app->get('/sandwichs/{id}/categories[/]',
 
   \lbs\controllers\CategorieController::class . ':getSandwichCategories'
 
-);
+); */
 
 
 /**
  * Sandwich
  * Tous les sandwichs
  */
-$app->get('/sandwichs[/]',
+/* $app->get('/sandwichs[/]',
 
     \lbs\controllers\SandwichController::class . ':getSandwichs'
 
 );
-
+ */
 /**
  * Avoir un sandwich par ID
  */
-$app->get('/sandwichs/{id}[/]',
+/* $app->get('/sandwichs/{id}[/]',
 
   \lbs\controllers\SandwichController::class . ':getSandwich'
 
-);
+); */
 
 /**
  * Retourne les sandwichs d'une catégorie
  */
-$app->get('/categories/{id}/sandwichs[/]',
+/* $app->get('/categories/{id}/sandwichs[/]',
 
   \lbs\controllers\SandwichController::class . ':getCategorieSandwichs'
 
 );
-
+ */
 
 
 /**
  * TWIG
  * Voir tous les sandwichs
  */
-$app->get('/home[/]', 
+/* $app->get('/home[/]', 
 
   \lbs\controllers\SandwichController::class . ':showAllSandwichs'
 
-)->setName('home');
+)->setName('home'); */
 
  /**
   * Ajouter le sandwich dans le form
   */
-$app->get('/addSandwich[/]', 
+/* $app->get('/addSandwich[/]', 
 
   \lbs\controllers\SandwichController::class . ':createSandwichForm'
 
-)->setName('createSandwich');
+)->setName('createSandwich'); */
 
 /**
  * Ajouter le sandwich
  */
-$app->post('/addSandwich[/]', 
+/* $app->post('/addSandwich[/]', 
 
   \lbs\controllers\SandwichController::class . ':createSandwich'
 
 );
-
+ */
 /**
  * Editer le sandwich dans le form
  */
-$app->get('/editSandwich/{id}[/]', 
+/* $app->get('/editSandwich/{id}[/]', 
 
   \lbs\controllers\SandwichController::class . ':editSandwichForm'
 
 )->setName('editSandwich');
-
+ */
 /**
  * Ajouter l'édition du sandwich 
  */
-$app->post('/editSandwich/{id}[/]', 
+/* $app->post('/editSandwich/{id}[/]', 
 
   \lbs\controllers\SandwichController::class . ':editSandwich'
 
 );
-
+ */
 /**
  * Supprimer le sandwich
  */
-$app->get('/deleteSandwich/{id}[/]', 
+/* $app->get('/deleteSandwich/{id}[/]', 
 
   \lbs\controllers\SandwichController::class . ':deleteSandwich'
 
 );
-
+ */
 
 /**
  * Form de connexion
  */
-$app->get('/login[/]', 
+/* $app->get('/login[/]', 
 
   \lbs\controllers\AuthController::class . ':loginForm'
 
 )->setName('login');
-
+ */
 
 /**
  *  Login du caissier
  */
-$app->post('/login[/]', 
+/* $app->post('/login[/]', 
 
   \lbs\controllers\AuthController::class . ':login'
 
 );
-
+ */
 
 /**
  * Déconnexion du caissier
  */
-$app->get('/logout[/]', 
+/* $app->get('/logout[/]', 
 
   \lbs\controllers\AuthController::class . ':logout'
 
-)->setName('logout');
+)->setName('logout'); */
 
 /**
  * Run

@@ -1,5 +1,6 @@
 <?php
 namespace gq\middlewares;
+
 use gq\controllers\Controller;
 
 /**

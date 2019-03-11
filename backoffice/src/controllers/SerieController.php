@@ -1,28 +1,28 @@
 <?php
-namespace lbs\controllers;
+namespace gq\controllers;
 
-use lbs\models\Categorie;
-use lbs\models\Sandwich;
+use gq\models\Categorie;
+use gq\models\Sandwich;
 
 /** 
- * Classe CategorieController
+ * Classe SerieController
  */
-class CategorieController extends Controller {
+class SerieController extends Controller {
 
 
     /**
-     * Catégorie
+     * Serie
      * Toutes les catégories
      * @param $req
      * @param $resp
      * @param $args
      */
-    public function getCategories($req, $resp, $args){
+    public function getSeries($req, $resp, $args){
 
         try{
 
-            $cat = Categorie::select()->get();
-            $total = $cat->count();
+            $serie = Serie::select()->get();
+            $total = $serie->count();
             $data = [
                 'type' => 'collection',
                 'date' =>date('d-m-Y'),

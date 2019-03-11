@@ -3,7 +3,7 @@ namespace gq\models;
  /**
   * Classe user extends \Illuminate\Database\Eloquent\Model
   */
-class Staff extends \Illuminate\Database\Eloquent\Model {
+class User extends \Illuminate\Database\Eloquent\Model {
 
     /**
      * Variable globale
