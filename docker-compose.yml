@@ -1,0 +1,95 @@
+version: "3"
+
+networks:
+  gq_network:
+    driver: bridge
+
+services:
+#########backoffice##########
+  api.backoffice:
+    image: canals/php:latest
+    environment:
+      - VHOST_HOSTNAME=api.backoffice.local
+      - VHOST_DOCROOT=/var/www/api
+#     - http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+#     - https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+    ports:
+      - "10080:80"
+      - "10443:443"
+    volumes :
+      - ./backoffice/api_backoffice:/var/www/api
+      - ./backoffice/src:/var/www/src
+    working_dir : /var/www/src
+    networks:
+      - gq_network
+    links :
+      - mysql:db
+#########player##########
+  api.player:
+    image: canals/php:latest
+    environment:
+      - VHOST_HOSTNAME=api.player.local
+      - VHOST_DOCROOT=/var/www/api
+#     - http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+#     - https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+    ports:
+      - "10081:80"
+      - "10444:443"
+    volumes :
+      - ./player/api_player:/var/www/api
+      - ./player/src:/var/www/src
+    working_dir : /var/www/src
+    networks:
+      - gq_network
+    links :
+      - mysql:db
+
+#########mobile##########
+  api.mobile:
+    image: canals/php:latest
+    environment:
+      - VHOST_HOSTNAME=api.mobile.local
+      - VHOST_DOCROOT=/var/www/api
+#     - http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+#     - https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+    ports:
+      - "10082:80"
+      - "10445:443"
+    volumes :
+      - ./mobile/api_mobile:/var/www/api
+      - ./mobile/src:/var/www/src
+    working_dir : /var/www/src
+    networks:
+      - gq_network
+    links :
+      - mysql:db
+
+#############################
+# mysql catalogue  + adminer
+#############################
+  mysql:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=gqroot
+      - MYSQL_USER=geoquizz
+      - MYSQL_PASSWORD=geoquizz
+      - MYSQL_DATABASE=geoquizz
+    ports:
+      - "3603:3306"
+    networks:
+      - gq_network
+    volumes :
+      - ./sql:/var/sql
+
+  adminer:
+     image: adminer
+     ports:
+       - "8080:8080"
+     networks:
+       - gq_network
+     links:
+       - mysql:db
+
+
+volumes:
+   data:
