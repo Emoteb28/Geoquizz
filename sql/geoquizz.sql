@@ -13,7 +13,10 @@ CREATE TABLE `partie` (
   `status` int(11) NOT NULL,
   `score` int(11) NOT NULL,
   `joueur` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  `serie_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `serie_id` (`serie_id`),
+  CONSTRAINT `partie_ibfk_1` FOREIGN KEY (`serie_id`) REFERENCES `serie` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -23,7 +26,21 @@ CREATE TABLE `photo` (
   `desc` varchar(255) NOT NULL,
   `position` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  `serie_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `serie_id` (`serie_id`),
+  CONSTRAINT `photo_ibfk_1` FOREIGN KEY (`serie_id`) REFERENCES `serie` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `photo2partie`;
+CREATE TABLE `photo2partie` (
+  `partie_id` int(11) NOT NULL,
+  `serie_id` int(11) NOT NULL,
+  KEY `partie_id` (`partie_id`),
+  KEY `serie_id` (`serie_id`),
+  CONSTRAINT `photo2partie_ibfk_1` FOREIGN KEY (`partie_id`) REFERENCES `partie` (`id`),
+  CONSTRAINT `photo2partie_ibfk_2` FOREIGN KEY (`serie_id`) REFERENCES `serie` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -37,4 +54,4 @@ CREATE TABLE `serie` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2019-03-11 10:32:55
+-- 2019-03-11 12:55:18
