@@ -1,5 +1,5 @@
 <?php
-namespace lbs\errors;
+namespace gq\errors;
 
 /**
  * Classe NotAllowed

@@ -47,7 +47,7 @@ $config = [
         'notFoundHandler' => function($c) {
             return function ($req, $resp) use ($c) {
              
-                return \lbs\errors\NotFound::error($req, $resp);
+                return \gq\errors\NotFound::error($req, $resp);
 
             };
         },
@@ -60,7 +60,7 @@ $config = [
         'notAllowedHandler' => function($c) {
             return function (  $req,  $resp, $methods) {
                 
-                return \lbs\errors\NotFound::error($req, $resp, $methods);
+                return \gq\errors\NotFound::error($req, $resp, $methods);
 
             };
         },
@@ -73,7 +73,7 @@ $config = [
         'badRequestHandler' => function($c) {
             return function (  $req,  $resp) {
                 
-                return \lbs\errors\NotFound::error($req, $resp);
+                return \gq\errors\NotFound::error($req, $resp);
 
             };
         },
@@ -87,43 +87,9 @@ $config = [
         'errorHandler' => function ($c) {
             return function ($req, $resp, $exception) use ($c) {
                   
-                return \lbs\errors\NotFound::error($req, $resp, $exception);
+                return \gq\errors\NotFound::error($req, $resp, $exception);
 
             };
-        },
-
-        /**
-         * Auth
-         */
-        'auth' => function ($container) {
-            return new \lbs\auth\Auth;
-        },
-        /**
-         * CSRF :cross-site request forgery
-         */
-        'csrf' => function ($container) {
-            return new \Slim\Csrf\Guard;
-        },
-        /**
-         * View
-         */
-        'view' => function ($container) {
-            
-            $view = new \Slim\Views\Twig( __DIR__ . '/../views', [
-                'cache' => false
-            ]);
-        
-            // Instanciation de Slim
-            $router = $container->get('router');
-            $uri = \Slim\Http\Uri::createFromEnvironment(new \Slim\Http\Environment($_SERVER));
-            $view->addExtension(new Slim\Views\TwigExtension($router, $uri));
-
-            $view->getEnvironment()->addGlobal('auth', [
-                'check' => $container->auth->check(),  
-                'staff' => $container->auth->staff()
-              ]);
-        
-            return $view;
         }
     ];
 

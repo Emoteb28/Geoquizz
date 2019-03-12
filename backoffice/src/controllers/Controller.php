@@ -1,5 +1,5 @@
 <?php
-namespace lbs\controllers;
+namespace gq\controllers;
 
 /**
  * Classe Controller
