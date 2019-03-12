@@ -22,11 +22,11 @@ $app->add(\lbs\middlewares\Cors::class . ':checkAndAddCorsHeaders');
 
 
 /**
- * Creation de commande
+ * Creation de la partie
  */
-$app->post('/commandes[/]',
+$app->post('/parties[/]',
 
-    \lbs\controllers\CommandeController::class . ':createCommande'
+    \gq\controllers\PlayerController::class . ':createPartie'
 
 )->add(
     \lbs\middlewares\Token::class . ':checkJwtCreationCommande'
@@ -35,9 +35,9 @@ $app->post('/commandes[/]',
 /**
  * Recuperer une commande par son identifiant
  */
-$app->get('/commandes/{id}[/]',
+$app->get('/plays/{id}[/]',
 
-    \lbs\controllers\CommandeController::class . ':getCommande'
+    \lbs\controllers\PlayerController::class . ':playPartie'
 
 )->add(
     \lbs\middlewares\Token::class . ':check'
@@ -47,9 +47,9 @@ $app->get('/commandes/{id}[/]',
  * Mise à jour de la date de livraison
  */
 
-$app->patch('/commandes/{id}[/]',
+$app->patch('/afficher/{id}[/]',
 
-    \lbs\controllers\CommandeController::class . ':updateDateLivraison'
+    \lbs\controllers\PlayerController::class . ':afficherPartie'
 
 ); 
 
@@ -57,9 +57,9 @@ $app->patch('/commandes/{id}[/]',
  * Recuperation de la facture
  */
 
- $app->get('/commandes/{id}/facture[/]',
+ $app->get('/niveau/{id}/facture[/]',
 
-    \lbs\controllers\CommandeController::class . ':getFacture'
+    \lbs\controllers\PlayerController::class . ':niveauPartie'
 
 );
 
@@ -71,59 +71,11 @@ $app->patch('/commandes/{id}[/]',
  * Création du compte d'utilisateur
  */
 
-$app->post('/register[/]',
+$app->post('/scores[/]',
 
-    \lbs\controllers\UserController::class . ':createUser'
-
-);
-
-/**
- * Connexion client
- */
-
-$app->post('/login[/]',
-
-    \lbs\controllers\UserController::class . ':loginUser'
+    \lbs\controllers\PlayerController::class . ':scorePartie'
 
 );
-
-/**
- * Recupération des informations client
- */
-
-$app->get('/users/{id}[/]',
-
-    \lbs\controllers\UserController::class . ':getUser'
-
-)->add(
-    \lbs\middlewares\Token::class . ':checkJwt'
-);
-
-/**
- * Paiement de la commande
- */
-
-$app->patch('/commandes/{id}/payement[/]',
-
-    \lbs\controllers\UserController::class . ':payerCommande'
-
-)->add(
-    \lbs\middlewares\Token::class . ':checkJwtPayement'
-); 
-
-/**
- * Recuperation de l'historique des achats du client
- */
-
-$app->get('/users/{id}/commandes[/]',
-
-    \lbs\controllers\UserController::class . ':getUserCommandes'
-
-)->add(
-    \lbs\middlewares\Token::class . ':checkJwt'
-);
-
-
 
 /**
  * Lancement de l'application

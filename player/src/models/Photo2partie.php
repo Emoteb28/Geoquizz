@@ -4,7 +4,7 @@ namespace gq\models;
  * Class Commande
  * @package lbs\models
  */
-class User extends \Illuminate\Database\Eloquent\Model {
+class Photo2partie extends \Illuminate\Database\Eloquent\Model {
 
     /**
      * @var string
@@ -14,7 +14,7 @@ class User extends \Illuminate\Database\Eloquent\Model {
      * @var $incrementing
      * @var $keyType
      */
-       protected $table      = 'user';  
+       protected $table      = 'photo2partie';  
        protected $primaryKey = 'id';     
        public    $timestamps = false;  
        public    $incrementing = false;
