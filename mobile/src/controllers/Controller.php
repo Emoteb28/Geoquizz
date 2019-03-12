@@ -1,9 +1,8 @@
 <?php
-namespace lbs\controllers;
+namespace gq\controllers;
 
 /**
- * Class Controller
- * @package lbs\controllers
+ * Classe Controller
  */
 class Controller {
 
@@ -12,17 +11,12 @@ class Controller {
      */
     public $container;
 
-    /**
-     * Controller constructor.
-     * @param $container
-     */
     public function __construct($container){
         $this->container = $container;
     }
 
-
     /**
-     * Retourne les données en format JSON
+     * Fonction qui renvoie les données en format JSON
      * @param $response
      * @param $code
      * @param $data

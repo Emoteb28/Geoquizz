@@ -1,11 +1,8 @@
 <?php
-namespace lbs\bootstrap;
+namespace gq\bootstrap;
 
-/**
- * Class LbsBootstrap
- * @package lbs\bootstrap
- */
-class LbsBootstrap {
+
+class GqBootstrap {
         /**
          * @params $config
          */
