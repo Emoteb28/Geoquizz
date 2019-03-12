@@ -1,9 +1,9 @@
 <?php
-namespace lbs\errors;
+namespace gq\errors;
 
 /**
  * Class BadRequest
- * @package lbs\errors
+ * @package gq\errors
  */
 class BadRequest  {
 

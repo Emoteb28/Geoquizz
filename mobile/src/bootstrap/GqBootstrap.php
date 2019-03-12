@@ -1,11 +1,12 @@
 <?php
-namespace lbs\bootstrap;
+namespace gq\bootstrap;
+
 
 /**
- * Class LbsBootstrap
- * @package lbs\bootstrap
+ * Class GqBootstrap
+ * @package gq\bootstrap
  */
-class LbsBootstrap {
+class GqBootstrap {
 
     /**
      * Fonction start Eloquent
