@@ -1,9 +1,9 @@
 <?php
-namespace lbs\models;
+namespace gq\models;
  /**
-  * Classe Staff extends \Illuminate\Database\Eloquent\Model
+  * Classe user extends \Illuminate\Database\Eloquent\Model
   */
-class Staff extends \Illuminate\Database\Eloquent\Model {
+class User extends \Illuminate\Database\Eloquent\Model {
 
     /**
      * Variable globale
@@ -12,7 +12,7 @@ class Staff extends \Illuminate\Database\Eloquent\Model {
      * @var $primaryKey
      * @var $timestamps
      */
-       protected $table      = 'staff';  
+       protected $table      = 'user';  
        protected $primaryKey = 'id';     
        public    $timestamps = false;  
 

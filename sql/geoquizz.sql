@@ -22,9 +22,10 @@ CREATE TABLE `partie` (
 
 DROP TABLE IF EXISTS `photo`;
 CREATE TABLE `photo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` varchar(255) NOT NULL,
   `desc` varchar(255) NOT NULL,
-  `position` varchar(255) NOT NULL,
+  `lan` varchar(255) NOT NULL,
+  `lng` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   `serie_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -48,11 +49,15 @@ DROP TABLE IF EXISTS `serie`;
 CREATE TABLE `serie` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ville` varchar(255) NOT NULL,
-  `map_refs` varchar(255) NOT NULL,
+  `lat` varchar(255) NOT NULL,
+  `lng` varchar(255) NOT NULL,
   `dist` float NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `serie` (`id`, `ville`, `lat`, `lng`, `dist`) VALUES
+(1,	'Nancy',	'48.692055',	'6.184417',	13),
+(2,	'paris',	'48.8534',	'2.3488',	13);
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -63,5 +68,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `user` (`id`, `fullname`, `email`, `password`) VALUES
+(1,	'mouad mounach',	'mouad@gmail.com',	'$2y$10$gTGJymzboekpLJfiA.2m6ecT8EtBV/QvhZGJC57/vvrcTUQIA4SV6');
 
--- 2019-03-11 13:27:58
+-- 2019-03-12 11:05:30
