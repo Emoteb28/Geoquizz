@@ -24,14 +24,12 @@ class PlayerController extends Controller {
 
             $jsonData = $req->getParsedBody();
 
-            if (!isset($jsonData['token'])) return $response->withStatus(400);
             if (!isset($jsonData['nb_photos'])) return $response->withStatus(400);
             if (!isset($jsonData['status'])) return $response->withStatus(400); 
             if (!isset($jsonData['score'])) return $response->withStatus(400); 
             if (!isset($jsonData['joueur'])) return $response->withStatus(400); 
 
             $partie = new Partie();
-            $partie->token = filter_var($jsonData['token'], FILTER_SANITIZE_SPECIAL_CHARS);
             $partie->nb_photos = filter_var($jsonData['nb_photos'], FILTER_SANITIZE_SPECIAL_CHARS);
             $partie->status = filter_var($jsonData['status'], FILTER_SANITIZE_SPECIAL_CHARS);
             $partie->score = (int) filter_var($jsonData['score'], FILTER_SANITIZE_SPECIAL_CHARS);
