@@ -62,6 +62,47 @@ class PlayerController extends Controller {
 
         }
     }
+
+    public function playPartie($req, $resp, $args){
+
+        try{
+
+            //------
+
+            $jsonData = $req->getParsedBody();
+ 
+            if (!isset($jsonData['score'])) return $response->withStatus(400); 
+
+            $partie = new Partie();
+            $partie->score = (int) filter_var($jsonData['score'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+            // Create Partie
+            if($partie->save()) {
+
+                $data = [
+                    'type' => 'resource',
+                    'meta' => ['date' =>date('d-m-Y')],
+                    'partie' => $partie->toArray()
+                ];
+
+                return $this->jsonOutup($resp, 201, $data);
+
+            }else {
+
+                $data = ['type' => 'resource',
+                'meta' => ['date' =>date('d-m-Y')],
+                'message' => 'Partie Not Created'
+                ];
+
+                return $this->jsonOutup($resp, 400, $data);
+            
+        }
+    
+        }catch(\Exception $e){
+
+
+        }
+    }
 }
 
 
