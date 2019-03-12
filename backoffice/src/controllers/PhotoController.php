@@ -76,17 +76,18 @@ class PhotoController extends Controller {
      * @param $resp
      * @param $args
      */
-    public function getSeries($req, $resp, $args){
+    public function getPhotos($req, $resp, $args){
 
         try{
 
-            $series = Serie::select()->get();
-            $total = $series->count();
+            $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+            $photos = $serie->photos()->get();
+            $total = $photos->count();
             $data = [
                 'type' => 'collection',
                 'date' =>date('d-m-Y'),
                 'count' => $total,
-                'series' => $series->toArray()
+                'photos' => $photos->toArray()
             ];
 
             return $this->jsonOutup($resp, 200, $data);
@@ -99,25 +100,24 @@ class PhotoController extends Controller {
 
 
     /**
-     * Les series par ID
+     * Les photos par ID
      * @param $req
      * @param $resp
      * @param $args
      */
-    public function getSerie($req, $resp, $args){
+    public function getPhoto($req, $resp, $args){
 
         try{
 
-            $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+            $photo = Photo::where('id','=',$args['id'])->firstOrFail();
             
          
                 $data = [
                     'type' => 'resource',
                     'date' => date('d-m-Y'),
-                    'serie' => $serie->toArray(),
+                    'photo' => $photo->toArray(),
                     "links"=> [
-                        "series"=> [ "href" => "/series/".$args['id']."/photos/" ],
-                        "self" => [ "href" => "/series/".$args['id']."/" ]
+                        "photo" => [ "href" => "/photos/".$args['id']."/" ]
                     ]
             ];
             
@@ -130,7 +130,7 @@ class PhotoController extends Controller {
             $data = [
                 'type' => 'error',
                 'error' => 404,
-                'message' => 'ressource non disponible : /series/ '. $args['id']
+                'message' => 'ressource non disponible : /photo/ '. $args['id']
             ];
 
             return $this->jsonOutup($resp, 404, $data);
