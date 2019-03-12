@@ -4,7 +4,7 @@ namespace gq\models;
  * Class Commande
  * @package lbs\models
  */
-class User extends \Illuminate\Database\Eloquent\Model {
+class Serie extends \Illuminate\Database\Eloquent\Model {
 
     /**
      * @var string
@@ -14,7 +14,7 @@ class User extends \Illuminate\Database\Eloquent\Model {
      * @var $incrementing
      * @var $keyType
      */
-       protected $table      = 'user';  
+       protected $table      = 'serie';  
        protected $primaryKey = 'id';     
        public    $timestamps = false;  
        public    $incrementing = false;

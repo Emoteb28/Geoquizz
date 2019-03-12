@@ -1,10 +1,10 @@
 <?php
-namespace lbs\models;
+namespace gq\models;
 /**
  * Class Commande
  * @package lbs\models
  */
-class Commande extends \Illuminate\Database\Eloquent\Model {
+class Partie extends \Illuminate\Database\Eloquent\Model {
 
     /**
      * @var string
@@ -14,7 +14,7 @@ class Commande extends \Illuminate\Database\Eloquent\Model {
      * @var $incrementing
      * @var $keyType
      */
-       protected $table      = 'commande';  
+       protected $table      = 'partie';  
        protected $primaryKey = 'id';     
        public    $timestamps = false;  
        public    $incrementing = false;
@@ -23,10 +23,6 @@ class Commande extends \Illuminate\Database\Eloquent\Model {
     /**
      * @return mixed
      */
-       public function items()
-       {
-            return $this->hasMany('lbs\models\Item', 'command_id');
-       }
 
 }
 
