@@ -26,16 +26,7 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 $app->add(\gq\middlewares\Cors::class . ':checkAndAddCorsHeaders');
 
 
-/**
- * series
- * Toutes les series
- */
 
-/* $app->get('/series[/]',
-
-    \gq\controllers\SerieController::class . ':getSeries'
-
-); */
 
 /**
  * Compte user
@@ -73,6 +64,40 @@ $app->get('/users/{id}[/]',
     \gq\middlewares\Token::class . ':checkJwt'
 );
 
+/**
+ * Creation de serie
+ */
+$app->post('/series[/]',
+
+    \gq\controllers\SerieController::class . ':createSerie'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);;
+
+/**
+ * Recuperer une serie par son identifiant
+ */
+$app->get('/series/{id}[/]',
+
+    \gq\controllers\SerieController::class . ':getSerie'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
+
+/**
+ * series
+ * Toutes les series
+ */
+
+$app->get('/series[/]',
+
+    \gq\controllers\SerieController::class . ':getSeries'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
 
 /**
  * Catégorie par ID

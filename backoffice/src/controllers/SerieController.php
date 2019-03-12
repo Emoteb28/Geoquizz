@@ -1,18 +1,72 @@
 <?php
 namespace gq\controllers;
 
-use gq\models\Categorie;
-use gq\models\Sandwich;
+use gq\models\Serie;
+use gq\models\Photo;
 
 /** 
  * Classe SerieController
  */
 class SerieController extends Controller {
 
+    /**
+     * Creation commande
+     * @param $req
+     * @param $resp
+     * @param $args
+     * @return mixed|void
+     */
+
+    public function createSerie($req, $resp, $args){
+
+        try{
+
+            //------
+
+            $jsonData = $req->getParsedBody();
+
+            if (!isset($jsonData['ville'])) return $response->withStatus(400);
+            if (!isset($jsonData['lat'])) return $response->withStatus(400);
+            if (!isset($jsonData['lng'])) return $response->withStatus(400); 
+            if (!isset($jsonData['dist'])) return $response->withStatus(400); 
+
+            $serie = new Serie();
+            $serie->ville = filter_var($jsonData['ville'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $serie->lat = filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $serie->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $serie->dist = (int) filter_var($jsonData['dist'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+            // Create serie
+            if($serie->save()) {
+
+                $data = [
+                    'type' => 'resource',
+                    'meta' => ['date' =>date('d-m-Y')],
+                    'serie' => $serie->toArray()
+                ];
+
+                return $this->jsonOutup($resp, 201, $data);
+
+            }else {
+
+                $data = ['type' => 'resource',
+                'meta' => ['date' =>date('d-m-Y')],
+                'message' => 'serie Not Created'
+                ];
+
+                return $this->jsonOutup($resp, 400, $data);
+            
+        }
+    
+        }catch(\Exception $e){
+
+
+        }
+    }
 
     /**
      * Serie
-     * Toutes les catégories
+     * Toutes les series
      * @param $req
      * @param $resp
      * @param $args
@@ -21,13 +75,13 @@ class SerieController extends Controller {
 
         try{
 
-            $serie = Serie::select()->get();
-            $total = $serie->count();
+            $series = Serie::select()->get();
+            $total = $series->count();
             $data = [
                 'type' => 'collection',
                 'date' =>date('d-m-Y'),
                 'count' => $total,
-                'categories' => $cat->toArray()
+                'series' => $series->toArray()
             ];
 
             return $this->jsonOutup($resp, 200, $data);
@@ -40,25 +94,25 @@ class SerieController extends Controller {
 
 
     /**
-     * Les catégories par ID
+     * Les series par ID
      * @param $req
      * @param $resp
      * @param $args
      */
-    public function getCategorie($req, $resp, $args){
+    public function getSerie($req, $resp, $args){
 
         try{
 
-            $cat = Categorie::where('id','=',$args['id'])->firstOrFail();
+            $serie = Serie::where('id','=',$args['id'])->firstOrFail();
             
          
                 $data = [
                     'type' => 'resource',
                     'date' => date('d-m-Y'),
-                    'categorie' => $cat->toArray(),
+                    'serie' => $serie->toArray(),
                     "links"=> [
-                        "sandwichs"=> [ "href" => "/categories/".$args['id']."/sandwichs/" ],
-                        "self" => [ "href" => "/categories/".$args['id']."/" ]
+                        "series"=> [ "href" => "/series/".$args['id']."/photos/" ],
+                        "self" => [ "href" => "/series/".$args['id']."/" ]
                     ]
             ];
             
@@ -71,7 +125,7 @@ class SerieController extends Controller {
             $data = [
                 'type' => 'error',
                 'error' => 404,
-                'message' => 'ressource non disponible : /categories/ '. $args['id']
+                'message' => 'ressource non disponible : /series/ '. $args['id']
             ];
 
             return $this->jsonOutup($resp, 404, $data);
@@ -80,49 +134,6 @@ class SerieController extends Controller {
         }
 
     }
-
-
-    /**
-     * Le sandwich catégorie
-     * @param $req
-     * @param $resp
-     * @param $args
-     */
-    public function getSandwichCategories($req, $resp, $args){
-
-        try{
-
-            $sand = Sandwich::select()->where('id','=',$args['id'])->firstOrFail();
-
-            $categories = $sand->categories()->get();
-            
-         
-                $data = ['type' => 'resource',
-                'meta' => ['date' =>date('d-m-Y')],
-                'sandwich' => $sand->toArray(),
-                'categories' => $categories->toArray()
-            ];
-            
-
-            return $this->jsonOutup($resp, 200, $data);
-
-
-        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-
-            $data = [
-                'type' => 'error',
-                'error' => 404,
-                'message' => 'ressource non disponible : /categories/ '. $args['id'] . '/sandwichs'
-            ];
-
-            return $this->jsonOutup($resp, 404, $data);
-
-
-        }
-
-    }
-
-
 
 
 }
