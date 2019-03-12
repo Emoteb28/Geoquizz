@@ -26,13 +26,12 @@ class PlayerController extends Controller {
 
             if (!isset($jsonData['nb_photos'])) return $response->withStatus(400);
             if (!isset($jsonData['status'])) return $response->withStatus(400); 
-            if (!isset($jsonData['score'])) return $response->withStatus(400); 
             if (!isset($jsonData['joueur'])) return $response->withStatus(400); 
 
             $partie = new Partie();
             $partie->nb_photos = filter_var($jsonData['nb_photos'], FILTER_SANITIZE_SPECIAL_CHARS);
             $partie->status = filter_var($jsonData['status'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $partie->score = (int) filter_var($jsonData['score'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $partie->score = 0;
             $partie->joueur = (int) filter_var($jsonData['joueur'], FILTER_SANITIZE_SPECIAL_CHARS);
 
             // Create Partie
@@ -77,9 +76,14 @@ class PlayerController extends Controller {
             $partie->score = (int) filter_var($jsonData['score'], FILTER_SANITIZE_SPECIAL_CHARS);
 
             // Create Partie
+            // Create commande
             if($partie->save()) {
 
-                $data = [
+                   $score = 0;
+                        
+                   $score += 
+
+                   $data = [
                     'type' => 'resource',
                     'meta' => ['date' =>date('d-m-Y')],
                     'partie' => $partie->toArray()
