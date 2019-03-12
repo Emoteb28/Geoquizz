@@ -5,45 +5,50 @@ use gq\models\Serie;
 use gq\models\Photo;
 
 /** 
- * Classe SerieController
+ * Classe PhotoController
  */
-class SerieController extends Controller {
+class PhotoController extends Controller {
 
     /**
-     * Creation commande
+     * Creation Photo
      * @param $req
      * @param $resp
      * @param $args
      * @return mixed|void
      */
 
-    public function createSerie($req, $resp, $args){
+    public function createPhoto($req, $resp, $args){
 
         try{
 
             //------
-
             $jsonData = $req->getParsedBody();
 
-            if (!isset($jsonData['ville'])) return $resp->withStatus(400);
+            if (!isset($jsonData['desc'])) return $resp->withStatus(400);
             if (!isset($jsonData['lat'])) return $resp->withStatus(400);
             if (!isset($jsonData['lng'])) return $resp->withStatus(400); 
-            if (!isset($jsonData['dist'])) return $resp->withStatus(400); 
+            if (!isset($jsonData['url'])) return $resp->withStatus(400); 
 
-            $serie = new Serie();
-            $serie->ville = filter_var($jsonData['ville'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $serie->lat = filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $serie->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $serie->dist = (int) filter_var($jsonData['dist'], FILTER_SANITIZE_SPECIAL_CHARS);
 
-            // Create serie
-            if($serie->save()) {
+            $photo = new Photo();
+            $photo->id = Uuid::uuid4();
+            $photo->desc = filter_var($jsonData['desc'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $photo->lat = filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $photo->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $photo->url = $photo->id + '.jpg';
+
+            // Create photo
+            if($photo->save()) {
 
                 $data = [
                     'type' => 'resource',
                     'meta' => ['date' =>date('d-m-Y')],
-                    'serie' => $serie->toArray()
+                    'photo' => $photo->toArray()
                 ];
+
+                $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+
+                $photo->serie()->attach($serie);
 
                 return $this->jsonOutup($resp, 201, $data);
 
@@ -51,7 +56,7 @@ class SerieController extends Controller {
 
                 $data = ['type' => 'resource',
                 'meta' => ['date' =>date('d-m-Y')],
-                'message' => 'serie Not Created'
+                'message' => 'photo Not Created'
                 ];
 
                 return $this->jsonOutup($resp, 400, $data);
