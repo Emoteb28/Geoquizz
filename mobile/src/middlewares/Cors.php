@@ -1,10 +1,10 @@
 <?php
-namespace lbs\middlewares;
-use lbs\controllers\Controller;
+namespace gq\middlewares;
+use gq\controllers\Controller;
 
 /**
  * Class Cors
- * @package lbs\middlewares
+ * @package gq\middlewares
  *
  */
 class Cors extends Controller {

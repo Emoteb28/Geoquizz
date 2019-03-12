@@ -1,9 +1,9 @@
 <?php
-namespace lbs\errors;
+namespace gq\errors;
 
 /**
  * Class NotFound
- * @package lbs\errors
+ * @package gq\errors
  */
 class NotFound  {
 

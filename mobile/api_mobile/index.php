@@ -1,67 +1,72 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-
 require '../src/vendor/autoload.php';
 
 
-$container = new \Slim\Container(require_once __DIR__ . "/../src/conf/config.php"); 
+/**
+ * Container
+ */
+
+$container = new \Slim\Container(require_once __DIR__ . "/../src/conf/config.php");
 
 $app = new \Slim\App($container);
 
-\lbs\bootstrap\LbsBootstrap::startEloquent($container->settings['config']);
+\gq\bootstrap\GqBootstrap::startEloquent($container->settings['config']);
+
 
 /**
- * cors
+ * CORS Cross-origin resource sharing
  */
 $app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
-  });
-  
-$app->add(\lbs\middlewares\Cors::class . ':checkAndAddCorsHeaders');
+  return $response;
+});
+
+$app->add(\gq\middlewares\Cors::class . ':checkAndAddCorsHeaders');
+
+
 
 /**
- * Commandes
- * Toutes les commandes
+ * Creation de serie
  */
-$app->get('/commandes[/]',
+$app->post('/series[/]',
 
-    \lbs\controllers\CommandeController::class . ':getCommandes'
+    \gq\controllers\SerieController::class . ':createSerie'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);;
+
+
+/**
+ * series
+ * Toutes les series
+ */
+
+$app->get('/series[/]',
+
+    \gq\controllers\SerieController::class . ':getSeries'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
 );
 
 /**
- * Commande par ID
- */
+* Photos
+* Toutes les photos
+*/
 
-$app->get('/commandes/{id}[/]',
+$app->get('/photos[/]',
 
-    \lbs\controllers\CommandeController::class . ':getCommande'
+    \gq\controllers\SerieController::class . ':getPhotos'
 
-);
-
-/**
- * Les commandes Items
- */
-
- $app->get('/commandes/{id}/items[/]',
-
-    \lbs\controllers\CommandeController::class . ':getCommandeItems'
-
-);
-
-/**
- * Mise à jour du status de la commande
- */
-
-$app->patch('/commandes/{id}[/]',
-
-    \lbs\controllers\CommandeController::class . ':updateStatus'
-
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
 );
 
 
 /**
- * Lancement de l'application
+ * Run
  */
 $app->run();
 
