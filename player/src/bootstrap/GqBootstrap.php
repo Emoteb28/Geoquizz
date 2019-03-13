@@ -2,16 +2,20 @@
 namespace gq\bootstrap;
 
 
+/**
+ * Class GqBootstrap
+ * @package gq\bootstrap
+ */
 class GqBootstrap {
-        /**
-         * @params $config
-         */
+
+    /**
+     * Fonction start Eloquent
+     * @param $config
+     */
        public static function startEloquent($config)
        {
-                /**
-                 * On lance une instance de connexion
-                 */
 
+                /* une instance de connexion  */
                 $db = new \Illuminate\Database\Capsule\Manager();
 
                 $db->addConnection( $config ); /* configuration avec nos paramètres */
@@ -20,3 +24,4 @@ class GqBootstrap {
        }
 }
 
+?>
