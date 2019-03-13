@@ -12,7 +12,7 @@ $container = new \Slim\Container(require_once __DIR__ . "/../src/conf/config.php
 
 $app = new \Slim\App($container);
 
-// \gq\bootstrap\GqBootstrap::startEloquent($container->settings['config']);
+ \gq\bootstrap\GqBootstrap::startEloquent($container->settings['config']);
 
 /**
  * CORS Cross-origin resource sharing
@@ -28,10 +28,22 @@ $app->add(\gq\middlewares\Cors::class . ':checkAndAddCorsHeaders');
 /**
  * Creation de la partie
  */
-$app->post('/parties[/]',
+$app->post('/series/{id}/parties[/]',
 
     \gq\controllers\PartieController::class . ':createPartie'
 
+);
+
+
+/**
+ * Creation de la partie
+ */
+$app->get('/parties/{id}[/]',
+
+    \gq\controllers\PartieController::class . ':getPartie'
+
+)->add(
+  \gq\middlewares\Token::class . ':check'
 );
 
 /**

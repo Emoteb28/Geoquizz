@@ -2,6 +2,7 @@
 namespace gq\controllers;
 
 use gq\models\Partie;
+use gq\models\Serie;
 
 /** 
  * Classe SerieController
@@ -62,6 +63,47 @@ class PartieController extends Controller {
 
 
         }
+    }
+
+    /**
+     * Les series par ID
+     * @param $req
+     * @param $resp
+     * @param $args
+     */
+    public function getPartie($req, $resp, $args){
+
+        try{
+
+            $partie = Partie::where('id','=',$args['id'])->firstOrFail();
+            
+         
+                $data = [
+                    'type' => 'resource',
+                    'date' => date('d-m-Y'),
+                    'partie' => $partie->toArray(),
+                    "links"=> [
+                        "self" => [ "href" => "/parties/".$args['id']."/" ]
+                    ]
+            ];
+            
+
+            return $this->jsonOutup($resp, 200, $data);
+
+
+        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+
+            $data = [
+                'type' => 'error',
+                'error' => 404,
+                'message' => 'ressource non disponible : /partie/ '. $args['id']
+            ];
+
+            return $this->jsonOutup($resp, 404, $data);
+
+
+        }
+
     }
 
     
