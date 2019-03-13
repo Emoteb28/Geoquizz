@@ -28,14 +28,49 @@ class PhotoController extends Controller {
             $files = $req->getUploadedFiles();
             $newImage = $files['image'];
 
+            $uniqId = Uuid::uuid4();
+            $ext = explode('.', $newImage->getClientFileName());
+            $name = $uniqId . '.' . strtolower(end($ext));
+
+            $newImage->moveTo("/var/www/api/uploads/".$name);
+
             if($newImage->getError() === UPLOAD_ERR_OK){
-                
+
                 if (!isset($jsonData['desc'])) return $resp->withStatus(400);
                 if (!isset($jsonData['lat'])) return $resp->withStatus(400);
                 if (!isset($jsonData['lng'])) return $resp->withStatus(400); 
 
                 // Create photo
-                
+                $client = new Client([
+                    // Base URL : pour ensuite transmettre des requêtes relatives
+                    'base_uri' =>   $this->container->settings['backoffice'],
+                    // options par défaut pour les requêtes
+                    'timeout' => 2.0,
+                   ]);
+
+                $client->post('/series/'.$args['id'].'/photos/', [
+                    'headers' => [
+                        'Authorization' => $req->getHeader('Authorization')[0]
+                    ],
+                    'multipart' => [
+                        [
+                            'name'     => 'image',
+                            'contents' => fopen("/var/www/api/uploads/".$name, 'r')
+                        ],
+                        [
+                            'name'     => 'desc',
+                            'contents' => filter_var($jsonData['desc'], FILTER_SANITIZE_SPECIAL_CHARS)
+                        ],
+                        [
+                            'name'     => 'lat',
+                            'contents' => filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS)
+                        ],
+                        [
+                            'name'     => 'lng',
+                            'contents' => filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS)
+                        ]
+                    ]
+                ]);
         }
     
         }catch(\Exception $e){

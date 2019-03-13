@@ -22,6 +22,8 @@ $config = [
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '' 
         ],
+        'backoffice' => 'http://api.backoffice.local',
+        'secret' => 'mounach',
         'determineRouteBeforeAppMiddleware' => true,
         'cors' => [
             "methods" => ["GET", "POST", "PUT", "PATCH", "OPTION", "DELETE"],
