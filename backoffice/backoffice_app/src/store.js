@@ -14,7 +14,7 @@ export default new Vuex.Store({
     photo : localStorage.getItem('photo') || null,   
   },
   mutations: {
-
+  
   },
   actions: {
     register(context, data) {
@@ -26,6 +26,7 @@ export default new Vuex.Store({
         })
           .then(response => {
             resolve(response)
+            
           })
           .catch(error => {
             reject(error)
@@ -35,7 +36,7 @@ export default new Vuex.Store({
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
-        axios.post('/users/login', {
+        axios.post('/login', {
           email: credentials.email,
           password: credentials.password,
         })
@@ -45,7 +46,8 @@ export default new Vuex.Store({
             localStorage.setItem('access_token', token)
             context.commit('retrieveToken', token)
             resolve(response)
-            console.log(response);
+            alert('yoooo')
+            console.log(response)
             // context.commit('addTodo', response.data)
           })
           .catch(error => {
