@@ -1,18 +1,18 @@
 <?php
-namespace lbs\errors;
-
+namespace gq\errors;
+    
 /**
- * Class Internal
- * @package lbs\errors
+ *Classe Internal
  */
 class Internal  {
 
     /**
-     * Erreur interne
+     * function error
+     *
      * @param $req
      * @param $resp
      * @param $exception
-     * @return mixed
+     * @return void
      */
     static public function error($req, $resp, $exception){
 

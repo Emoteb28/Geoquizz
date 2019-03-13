@@ -1,5 +1,5 @@
-# LBS : une application exemple à base de micro-services
-## thématique : acheter des sandwichs
+# GQZ : une application exemple à base de micro-services
+## thématique : 
 
 ## Services
 

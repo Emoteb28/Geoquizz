@@ -13,15 +13,7 @@ $container = new \Slim\Container(require_once __DIR__ . "/../src/conf/config.php
 
 $app = new \Slim\App($container);
 
-\lbs\bootstrap\LbsBootstrap::startEloquent($container->settings['config']);
-
-
-/**
- * CSRF :cross-site request forgery
- */
-$app->add(new \lbs\middlewares\Csrf($container));
-
-$app->add($container->csrf);
+\gq\bootstrap\GqBootstrap::startEloquent($container->settings['config']);
 
 
 /**
@@ -31,156 +23,116 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
   return $response;
 });
 
-$app->add(\lbs\middlewares\Cors::class . ':checkAndAddCorsHeaders');
+$app->add(\gq\middlewares\Cors::class . ':checkAndAddCorsHeaders');
+
+
 
 
 /**
- * Catégorie
- * Toutes les catégories
+ * Compte user
  */
-
-$app->get('/categories[/]',
-
-    \lbs\controllers\CategorieController::class . ':getCategories'
-
-);
-
 
 /**
- * Catégorie par ID
- */
-$app->get('/categories/{id}[/]',
-
-    \lbs\controllers\CategorieController::class . ':getCategorie'
-);
-
-
-/**
- * Retourne les catégories d'un sandwich
+ * Création du compte d'utilisateur
  */
 
+$app->post('/register[/]',
 
-$app->get('/sandwichs/{id}/categories[/]',
-
-  \lbs\controllers\CategorieController::class . ':getSandwichCategories'
-
-);
-
-
-/**
- * Sandwich
- * Tous les sandwichs
- */
-$app->get('/sandwichs[/]',
-
-    \lbs\controllers\SandwichController::class . ':getSandwichs'
+    \gq\controllers\UserController::class . ':createUser'
 
 );
 
 /**
- * Avoir un sandwich par ID
+ * Connexion user
  */
-$app->get('/sandwichs/{id}[/]',
 
-  \lbs\controllers\SandwichController::class . ':getSandwich'
+$app->post('/login[/]',
+
+    \gq\controllers\UserController::class . ':loginUser'
 
 );
 
 /**
- * Retourne les sandwichs d'une catégorie
+ * Recupération des informations user
  */
-$app->get('/categories/{id}/sandwichs[/]',
 
-  \lbs\controllers\SandwichController::class . ':getCategorieSandwichs'
+$app->get('/users/{id}[/]',
 
-);
+    \gq\controllers\UserController::class . ':getUser'
 
-
-
-/**
- * TWIG
- * Voir tous les sandwichs
- */
-$app->get('/home[/]', 
-
-  \lbs\controllers\SandwichController::class . ':showAllSandwichs'
-
-)->setName('home');
-
- /**
-  * Ajouter le sandwich dans le form
-  */
-$app->get('/addSandwich[/]', 
-
-  \lbs\controllers\SandwichController::class . ':createSandwichForm'
-
-)->setName('createSandwich');
-
-/**
- * Ajouter le sandwich
- */
-$app->post('/addSandwich[/]', 
-
-  \lbs\controllers\SandwichController::class . ':createSandwich'
-
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
 );
 
 /**
- * Editer le sandwich dans le form
+ * Creation de serie
  */
-$app->get('/editSandwich/{id}[/]', 
+$app->post('/series[/]',
 
-  \lbs\controllers\SandwichController::class . ':editSandwichForm'
+    \gq\controllers\SerieController::class . ':createSerie'
 
-)->setName('editSandwich');
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);;
 
 /**
- * Ajouter l'édition du sandwich 
+ * Recuperer une serie par son identifiant
  */
-$app->post('/editSandwich/{id}[/]', 
+$app->get('/series/{id}[/]',
 
-  \lbs\controllers\SandwichController::class . ':editSandwich'
+    \gq\controllers\SerieController::class . ':getSerie'
 
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
 );
 
 /**
- * Supprimer le sandwich
+ * series
+ * Toutes les series
  */
-$app->get('/deleteSandwich/{id}[/]', 
 
-  \lbs\controllers\SandwichController::class . ':deleteSandwich'
+$app->get('/series[/]',
 
+    \gq\controllers\SerieController::class . ':getSeries'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
 );
 
+/**
+ * Creation de photo
+ */
+$app->post('/series/{id}/photos[/]',
+
+    \gq\controllers\PhotoController::class . ':createPhoto'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);;
 
 /**
- * Form de connexion
+ * Recuperer une photo par son identifiant
  */
-$app->get('/login[/]', 
+$app->get('/photos/{id}[/]',
 
-  \lbs\controllers\AuthController::class . ':loginForm'
+    \gq\controllers\PhotoController::class . ':getPhoto'
 
-)->setName('login');
-
-
-/**
- *  Login du caissier
- */
-$app->post('/login[/]', 
-
-  \lbs\controllers\AuthController::class . ':login'
-
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
 );
 
-
 /**
- * Déconnexion du caissier
+ * photos
+ * Toutes les photos par serie
  */
-$app->get('/logout[/]', 
 
-  \lbs\controllers\AuthController::class . ':logout'
+$app->get('/series/{id}/photos[/]',
 
-)->setName('logout');
+    \gq\controllers\PhotoController::class . ':getPhotos'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
 
 /**
  * Run
