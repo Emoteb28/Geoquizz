@@ -3,6 +3,8 @@ namespace gq\controllers;
 
 use gq\models\Serie;
 use gq\models\Photo;
+use Ramsey\Uuid\Uuid;
+use GuzzleHttp\Client;
 
 /** 
  * Classe PhotoController
@@ -27,7 +29,6 @@ class PhotoController extends Controller {
             if (!isset($jsonData['desc'])) return $resp->withStatus(400);
             if (!isset($jsonData['lat'])) return $resp->withStatus(400);
             if (!isset($jsonData['lng'])) return $resp->withStatus(400); 
-            if (!isset($jsonData['url'])) return $resp->withStatus(400); 
 
 
             $photo = new Photo();
@@ -35,7 +36,11 @@ class PhotoController extends Controller {
             $photo->desc = filter_var($jsonData['desc'], FILTER_SANITIZE_SPECIAL_CHARS);
             $photo->lat = filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
             $photo->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $photo->url = $photo->id + '.jpg';
+            $photo->url = $photo->id . '.jpg';
+
+            $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+            $photo->serie()->associate($serie);
+            
 
             // Create photo
             if($photo->save()) {
@@ -45,10 +50,6 @@ class PhotoController extends Controller {
                     'meta' => ['date' =>date('d-m-Y')],
                     'photo' => $photo->toArray()
                 ];
-
-                $serie = Serie::where('id','=',$args['id'])->firstOrFail();
-
-                $photo->serie()->attach($serie);
 
                 return $this->jsonOutup($resp, 201, $data);
 
@@ -65,6 +66,12 @@ class PhotoController extends Controller {
     
         }catch(\Exception $e){
 
+            $data = ['type' => 'resource',
+                'meta' => ['date' =>date('d-m-Y')],
+                'message' => $e->getMessage()
+                ];
+
+                return $this->jsonOutup($resp, 400, $data);
 
         }
     }

@@ -15,7 +15,9 @@ class Photo extends \Illuminate\Database\Eloquent\Model {
        */
        protected $table      = 'photo';  
        protected $primaryKey = 'id';     
-       public    $timestamps = false;  
+       public    $timestamps = false;
+       public    $incrementing = false;
+       public    $keyType = 'string';
 
        /**
         * Fonction serie

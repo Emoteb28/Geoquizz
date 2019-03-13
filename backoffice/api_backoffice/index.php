@@ -102,7 +102,7 @@ $app->get('/series[/]',
 /**
  * Creation de photo
  */
-$app->post('/series/{id}/photo[/]',
+$app->post('/series/{id}/photos[/]',
 
     \gq\controllers\PhotoController::class . ':createPhoto'
 
@@ -113,7 +113,7 @@ $app->post('/series/{id}/photo[/]',
 /**
  * Recuperer une photo par son identifiant
  */
-$app->get('/photo/{id}[/]',
+$app->get('/photos/{id}[/]',
 
     \gq\controllers\PhotoController::class . ':getPhoto'
 
