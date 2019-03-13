@@ -1,17 +1,17 @@
 <?php
-namespace lbs\errors;
+namespace gq\errors;
 
 /**
- * Class NotFound
- * @package lbs\errors
+ * Classe NotFound
  */
 class NotFound  {
 
     /**
-     * Erreur non trouvé
+     * Function error
+     *
      * @param $req
      * @param $resp
-     * @return mixed
+     * @return void
      */
     static public function error($req, $resp){
 

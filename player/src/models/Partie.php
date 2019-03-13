@@ -1,28 +1,34 @@
 <?php
 namespace gq\models;
 /**
- * Class Commande
- * @package lbs\models
+ * Classe Partie extends \Illuminate\Database\Eloquent\Model
  */
 class Partie extends \Illuminate\Database\Eloquent\Model {
-
-    /**
-     * @var string
-     * @var $table
-     * @var $primaryKey
-     * @var $timestamps
-     * @var $incrementing
-     * @var $keyType
-     */
+      /**
+       * Variable globale
+       * @var $table
+       * @var $primaryKey
+       * @var $timestamps
+       */
        protected $table      = 'partie';  
        protected $primaryKey = 'id';     
-       public    $timestamps = false;  
-       public    $incrementing = false;
-       public    $keyType = 'string';
+       public    $timestamps = false;
+       /**
+        * Fonction serie
+        * belongsTo
+        * @return void
+        */
+        
+       public function serie()
+       {
+            return $this->belongsTo('gq\models\Serie', 'serie_id');
+       }
 
-    /**
-     * @return mixed
-     */
+       public function photos()
+       {
+            return $this->belongsToMany('gq\models\Photo', 'photo2partie', 'partie_id', 'photo_id');
+       }
 
-}
-
+       
+    }
+?>

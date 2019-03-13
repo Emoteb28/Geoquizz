@@ -53,7 +53,12 @@ class UserController extends Controller {
 
         }catch(\Exception $e){
 
+                $data = ['type' => 'resource',
+                'meta' => ['date' =>date('d-m-Y')],
+                'message' => $e->getMessage()
+                ];
 
+                return $this->jsonOutup($resp, 400, $data);
 
         }
 

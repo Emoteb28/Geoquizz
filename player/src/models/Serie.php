@@ -1,28 +1,27 @@
 <?php
 namespace gq\models;
 /**
- * Class Commande
- * @package lbs\models
+ * Classe Serie extends \Illuminate\Database\Eloquent\Model
  */
 class Serie extends \Illuminate\Database\Eloquent\Model {
-
-    /**
-     * @var string
-     * @var $table
-     * @var $primaryKey
-     * @var $timestamps
-     * @var $incrementing
-     * @var $keyType
-     */
+     /**
+      * Variable globale
+      *
+      * @var $table
+      * @var $primaryKey
+      * @var $timestamps
+      */
        protected $table      = 'serie';  
        protected $primaryKey = 'id';     
        public    $timestamps = false;  
-       public    $incrementing = false;
-       public    $keyType = 'string';
-
-    /**
-     * @return mixed
-     */
-
+     /**
+      * Fonction serie hasMany
+      *
+      * @return void
+      */
+       public function photos()
+       {
+            return $this->hasMany('gq\models\Photo', 'serie_id');
+       }
 }
-
+?>

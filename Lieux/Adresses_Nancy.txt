@@ -1,0 +1,59 @@
+1. Place Stan
+Nancy
+54000
+48.693795, 6.183220
+
+2. Pepiniere
+Unnamed Road
+54000 Nancy
+48.698368, 6.185178
+
+3. porteCrafe
+54000 Nancy
+48.699086, 6.177795
+
+4. eglise saint epvre
+54000
+48.696221, 6.179904
+
+5. rueFelixFaure
+34 Rue Félix Faure, 54000 Nancy
+48.678210, 6.165279
+
+6. villaMajorelle
+54000 Nancy
+48.686686, 6.163525
+
+7. Musée de l'École
+54000 Nancy
+48.682209, 6.166271
+
+8. cimetiaireSud
+54500 Vandœuvre-lès-Nancy
+48.673293, 6.189485
+
+9. La Meurthe
+48.673731, 6.213664
+
+10. tourMarcelBrot
+54000 Nancy
+48.678147, 6.202624
+
+11. materniteRegionale
+54000 Nancy
+48.681349, 6.190020
+
+12. Muséum-Aquarium
+54000
+48.695943, 6.188008
+
+13. Gare de Nancy
+54000 Nancy
+48.690470, 6.174369
+
+14. 54000 Nancy
+48.688873, 6.177283
+
+15. Institut Universitaire de Technologie Charlemagne
+54000 Nancy
+48.683049, 6.161091

@@ -1,18 +1,17 @@
 <?php
-namespace lbs\errors;
+namespace gq\errors;
 
 /**
- * Class NotAllowed
- * @package lbs\errors
+ * Classe NotAllowed
  */
 class NotAllowed  {
 
     /**
-     * Erreur permission
+     * function error
      * @param $req
      * @param $resp
      * @param $methods
-     * @return mixed
+     * @return void
      */
     static public function error($req, $resp, $methods){
 
