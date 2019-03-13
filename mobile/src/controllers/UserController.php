@@ -96,8 +96,8 @@ class UserController extends Controller {
 
                         $secret = "mounach";
 
-                        $token = JWT::encode( [ 'iss'=>'http://api.backoffice.local',
-                                                'aud'=>'http://api.backoffice.local',
+                        $token = JWT::encode( [ 'iss'=>'http://api.mobile.local',
+                                                'aud'=>'http://api.mobile.local',
                                                 'iat'=>time(), 'exp'=>time()+3600,
                                                 'uid' => $user->id,
                                                 'umail' => $user->email,

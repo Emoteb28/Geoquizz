@@ -24,7 +24,41 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 
 $app->add(\gq\middlewares\Cors::class . ':checkAndAddCorsHeaders');
 
+/**
+ * Compte user
+ */
 
+/**
+ * Création du compte d'utilisateur
+ */
+
+$app->post('/register[/]',
+
+    \gq\controllers\UserController::class . ':createUser'
+
+);
+
+/**
+ * Connexion user
+ */
+
+$app->post('/login[/]',
+
+    \gq\controllers\UserController::class . ':loginUser'
+
+);
+
+/**
+ * Recupération des informations user
+ */
+
+$app->get('/users/{id}[/]',
+
+    \gq\controllers\UserController::class . ':getUser'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);
 
 /**
  * Creation de serie
@@ -46,6 +80,17 @@ $app->post('/series[/]',
 $app->get('/series[/]',
 
     \gq\controllers\SerieController::class . ':getSeries'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
+
+/**
+ * Recuperer une serie par son identifiant
+ */
+$app->get('/series/{id}[/]',
+
+    \gq\controllers\SerieController::class . ':getSerie'
 
 )->add(
   \gq\middlewares\Token::class . ':checkJwt'
@@ -91,8 +136,3 @@ $app->get('/series/{id}/photos[/]',
  * Run
  */
 $app->run();
-
-
-
-
-
