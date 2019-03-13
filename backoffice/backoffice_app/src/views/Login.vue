@@ -1,95 +1,94 @@
 <template>
-  <v-card height="200px">
-    <v-bottom-nav
-      :active.sync="bottomNav"
-      :color="color"
-      :value="true"
-      absolute
-      dark
-      shift
+<div>
+  <v-parallax
+    dark
+    src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
+  >
+    <v-layout
+      align-center
+      column
+      justify-center
     >
-      <v-btn dark>
-        <span>Gestion des séries</span>
-        <v-icon>mid-city</v-icon>
-      </v-btn>
+      <h1 class="display-2 font-weight-thin mb-3">Geoquizz</h1>
+      <h4 class="subheading">BackOffice Administration</h4>
+    </v-layout>
+  </v-parallax>
+          <v-container align-center justify-center>
+            <v-layout row wrap align-center justify-center>
+                <v-flex xs12 sm6>
+                    <v-card class="elevation-8">
+                        <!-- ERROR MESSAGE -->
+                        <v-layout row v-if="error">
+                            <v-flex xs12 sm6 offset-sm3>
+                                <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+                            </v-flex>
+                        </v-layout>
 
-      <v-btn dark>
-        <span>Paramétres</span>
-        <v-icon>music_note</v-icon>
-      </v-btn>
+                        <!-- Login/Signin -->
+                        <v-layout row align-center justify-center class="py-5">
 
-    </v-bottom-nav>
-  </v-card>
+                            <v-form @submit.prevent="login">
+
+                                <!-- <v-layout row> -->
+                                <v-flex xs12>
+                                    <h1 class="text-xs-center mb-5">Connexion</h1>
+                                    <v-text-field name="email" label="Email" id="email" v-model="email" type="email" required></v-text-field>
+                                </v-flex>
+
+                                <v-flex xs12>
+                                    <v-text-field @tap='login' name="password" label="Mot de passe" id="password" v-model="password" type="password" required></v-text-field>
+                                </v-flex>
+
+                                <v-flex xs12 class="py-3">
+                                    <div class="text-xs-center">
+                                        <v-btn outline type="submit" :disabled="loading" :loading="loading">
+                                            Envoyé
+                                            <v-icon right>lock_open</v-icon>
+                                            <span slot="loader" class="custom-loader">
+                                            <v-icon light>cached</v-icon>
+                                        </span>
+                                        </v-btn>
+                                    </div>
+
+                                    <div class="text-xs-center">
+                                        <v-btn color="info" dark :disabled="loading" :loading="loading" @click.prevent="onResetPassword">Reset Password By Email
+                                            <v-icon right dark>email</v-icon>
+                                            <span slot="loader" class="custom-loader">
+                                            <v-icon light>cached</v-icon>
+                                        </span>
+                                        </v-btn>
+                                    </div>
+                                </v-flex>
+                            </v-form>
+                        </v-layout>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+        </v-container>
+        </div>
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      ecosystem: [
-        {
-          text: 'vuetify-loader',
-          href: 'https://github.com/vuetifyjs/vuetify-loader'
-        },
-        {
-          text: 'github',
-          href: 'https://github.com/vuetifyjs/vuetify'
-        },
-        {
-          text: 'awesome-vuetify',
-          href: 'https://github.com/vuetifyjs/awesome-vuetify'
-        }
-      ],
-      importantLinks: [
-        {
-          text: 'Documentation',
-          href: 'https://vuetifyjs.com'
-        },
-        {
-          text: 'Chat',
-          href: 'https://community.vuetifyjs.com'
-        },
-        {
-          text: 'Made with Vuetify',
-          href: 'https://madewithvuetifyjs.com'
-        },
-        {
-          text: 'Twitter',
-          href: 'https://twitter.com/vuetifyjs'
-        },
-        {
-          text: 'Articles',
-          href: 'https://medium.com/vuetify'
-        }
-      ],
-      whatsNext: [
-        {
-          text: 'Explore components',
-          href: 'https://vuetifyjs.com/components/api-explorer'
-        },
-        {
-          text: 'Select a layout',
-          href: 'https://vuetifyjs.com/layout/pre-defined'
-        },
-        {
-          text: 'Frequently Asked Questions',
-          href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions'
-        }
-
-      ],
-      bottomNav: 3
-
-    }),
-    computed :  {
-      color () {
-        switch (this.bottomNav) {
-          case 0: return 'blue-grey'
-          case 1: return 'teal'
-          case 2: return 'brown'
-          case 3: return 'indigo'
-        }
+export default {
+  name: 'login',
+  data() {
+    return {
+      email: '',
+      password: '',
+    }
+  },
+  methods: {
+    login() {
+      this.$store.dispatch('retrieveToken', {
+        email: this.email,
+        password: this.password,
+      })
+        .then(response => {          
+          this.$router.push({ name: 'home' })
+        })
     }
   }
-  }
+}
 </script>
 
 <style>
