@@ -35,9 +35,9 @@ $app->post('/parties[/]',
 /**
  * Recuperer une commande par son identifiant
  */
-$app->get('/plays/{id}[/]',
+$app->get('/afficher[/]',
 
-    \lbs\controllers\PlayerController::class . ':playPartie'
+    \lbs\controllers\PlayerController::class . ':scorePartie'
 
 )->add(
     \lbs\middlewares\Token::class . ':check'

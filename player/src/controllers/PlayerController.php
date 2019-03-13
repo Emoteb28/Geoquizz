@@ -62,7 +62,7 @@ class PlayerController extends Controller {
         }
     }
 
-    public function playPartie($req, $resp, $args){
+    public function scorePartie($req, $resp, $args){
 
         try{
 
@@ -75,13 +75,14 @@ class PlayerController extends Controller {
             $partie = new Partie();
             $partie->score = (int) filter_var($jsonData['score'], FILTER_SANITIZE_SPECIAL_CHARS);
 
-            // Create Partie
-            // Create commande
+            if($partie->status = "Terminer")
+            {
+
             if($partie->save()) {
 
                    $score = 0;
                         
-                   $score += 
+                   $score = $score + 1; 
 
                    $data = [
                     'type' => 'resource',
@@ -100,8 +101,8 @@ class PlayerController extends Controller {
 
                 return $this->jsonOutup($resp, 400, $data);
             
-        }
-    
+                }
+            }
         }catch(\Exception $e){
 
 
