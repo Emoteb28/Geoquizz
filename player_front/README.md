@@ -1,4 +1,4 @@
-# backoffice
+# player_front
 
 ## Project setup
 ```
