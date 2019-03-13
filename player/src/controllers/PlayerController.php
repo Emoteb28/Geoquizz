@@ -73,10 +73,11 @@ class PlayerController extends Controller {
             if (!isset($jsonData['score'])) return $response->withStatus(400); 
 
             $partie = new Partie();
-            $partie->score = (int) filter_var($jsonData['score'], FILTER_SANITIZE_SPECIAL_CHARS);
 
             if($partie->status = "Terminer")
             {
+
+            $partie->score = (int) filter_var($jsonData['score'], FILTER_SANITIZE_SPECIAL_CHARS);
 
             if($partie->save()) {
 
