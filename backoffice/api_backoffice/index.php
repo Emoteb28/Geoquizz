@@ -100,6 +100,41 @@ $app->get('/series[/]',
 );
 
 /**
+ * Creation de photo
+ */
+$app->post('/series/{id}/photos[/]',
+
+    \gq\controllers\PhotoController::class . ':createPhoto'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);;
+
+/**
+ * Recuperer une photo par son identifiant
+ */
+$app->get('/photos/{id}[/]',
+
+    \gq\controllers\PhotoController::class . ':getPhoto'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
+
+/**
+ * photos
+ * Toutes les photos par serie
+ */
+
+$app->get('/series/{id}/photos[/]',
+
+    \gq\controllers\PhotoController::class . ':getPhotos'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
+
+/**
  * Catégorie par ID
  */
 /* $app->get('/categories/{id}[/]',

@@ -3,46 +3,52 @@ namespace gq\controllers;
 
 use gq\models\Serie;
 use gq\models\Photo;
+use Ramsey\Uuid\Uuid;
+use GuzzleHttp\Client;
 
 /** 
- * Classe SerieController
+ * Classe PhotoController
  */
-class SerieController extends Controller {
+class PhotoController extends Controller {
 
     /**
-     * Creation commande
+     * Creation Photo
      * @param $req
      * @param $resp
      * @param $args
      * @return mixed|void
      */
 
-    public function createSerie($req, $resp, $args){
+    public function createPhoto($req, $resp, $args){
 
         try{
 
             //------
-
             $jsonData = $req->getParsedBody();
 
-            if (!isset($jsonData['ville'])) return $resp->withStatus(400);
+            if (!isset($jsonData['desc'])) return $resp->withStatus(400);
             if (!isset($jsonData['lat'])) return $resp->withStatus(400);
             if (!isset($jsonData['lng'])) return $resp->withStatus(400); 
-            if (!isset($jsonData['dist'])) return $resp->withStatus(400); 
 
-            $serie = new Serie();
-            $serie->ville = filter_var($jsonData['ville'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $serie->lat = filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $serie->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $serie->dist = (int) filter_var($jsonData['dist'], FILTER_SANITIZE_SPECIAL_CHARS);
 
-            // Create serie
-            if($serie->save()) {
+            $photo = new Photo();
+            $photo->id = Uuid::uuid4();
+            $photo->desc = filter_var($jsonData['desc'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $photo->lat = filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $photo->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $photo->url = $photo->id . '.jpg';
+
+            $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+            $photo->serie()->associate($serie);
+            
+
+            // Create photo
+            if($photo->save()) {
 
                 $data = [
                     'type' => 'resource',
                     'meta' => ['date' =>date('d-m-Y')],
-                    'serie' => $serie->toArray()
+                    'photo' => $photo->toArray()
                 ];
 
                 return $this->jsonOutup($resp, 201, $data);
@@ -51,7 +57,7 @@ class SerieController extends Controller {
 
                 $data = ['type' => 'resource',
                 'meta' => ['date' =>date('d-m-Y')],
-                'message' => 'serie Not Created'
+                'message' => 'photo Not Created'
                 ];
 
                 return $this->jsonOutup($resp, 400, $data);
@@ -60,6 +66,12 @@ class SerieController extends Controller {
     
         }catch(\Exception $e){
 
+            $data = ['type' => 'resource',
+                'meta' => ['date' =>date('d-m-Y')],
+                'message' => $e->getMessage()
+                ];
+
+                return $this->jsonOutup($resp, 400, $data);
 
         }
     }
@@ -71,17 +83,18 @@ class SerieController extends Controller {
      * @param $resp
      * @param $args
      */
-    public function getSeries($req, $resp, $args){
+    public function getPhotos($req, $resp, $args){
 
         try{
 
-            $series = Serie::select()->get();
-            $total = $series->count();
+            $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+            $photos = $serie->photos()->get();
+            $total = $photos->count();
             $data = [
                 'type' => 'collection',
                 'date' =>date('d-m-Y'),
                 'count' => $total,
-                'series' => $series->toArray()
+                'photos' => $photos->toArray()
             ];
 
             return $this->jsonOutup($resp, 200, $data);
@@ -94,25 +107,24 @@ class SerieController extends Controller {
 
 
     /**
-     * Les series par ID
+     * Les photos par ID
      * @param $req
      * @param $resp
      * @param $args
      */
-    public function getSerie($req, $resp, $args){
+    public function getPhoto($req, $resp, $args){
 
         try{
 
-            $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+            $photo = Photo::where('id','=',$args['id'])->firstOrFail();
             
          
                 $data = [
                     'type' => 'resource',
                     'date' => date('d-m-Y'),
-                    'serie' => $serie->toArray(),
+                    'photo' => $photo->toArray(),
                     "links"=> [
-                        "series"=> [ "href" => "/series/".$args['id']."/photos/" ],
-                        "self" => [ "href" => "/series/".$args['id']."/" ]
+                        "photo" => [ "href" => "/photos/".$args['id']."/" ]
                     ]
             ];
             
@@ -125,7 +137,7 @@ class SerieController extends Controller {
             $data = [
                 'type' => 'error',
                 'error' => 404,
-                'message' => 'ressource non disponible : /series/ '. $args['id']
+                'message' => 'ressource non disponible : /photo/ '. $args['id']
             ];
 
             return $this->jsonOutup($resp, 404, $data);
