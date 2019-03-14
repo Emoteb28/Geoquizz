@@ -1,6 +1,6 @@
 <template>
 	<Page>
-		<FlexboxLayout class="page">
+		<FlexboxLayout class="page" >
 			<StackLayout class="form">
 				<Image class="logo" src="~/images/logo.png" />
 				<Label class="header" text="GeoQuizzApp" />
