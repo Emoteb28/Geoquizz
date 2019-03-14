@@ -8,31 +8,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token : localStorage.getItem('access_token') || null,
-    listSeries : localStorage.getItem('listSeries') || null,
-    user : localStorage.getItem('user') || null,
-    photo : localStorage.getItem('photo') || null,   
+    token: localStorage.getItem('access_token') || null,
+    listSeries: localStorage.getItem('listSeries') || null,
+    user: localStorage.getItem('user') || null,
+    photo: localStorage.getItem('photo') || null,
   },
   mutations: {
-  
+
   },
   actions: {
-    register(context, data) {
-      return new Promise((resolve, reject) => {
-        axios.post('/register', {
-          fullname: data.name,
-          email: data.email,
-          password: data.password,
-        })
-          .then(response => {
-            resolve(response)
-            
-          })
-          .catch(error => {
-            reject(error)
-          })
-      })
-    },
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
@@ -47,19 +31,14 @@ export default new Vuex.Store({
             context.commit('retrieveToken', token)
             resolve(response)
             alert('yoooo')
-            console.log(response)
+            console.log(response.data.access_token)
             // context.commit('addTodo', response.data)
           })
           .catch(error => {
             console.log(error)
             reject(error)
           })
-        })
-    },
-    login(context, credentials) {
-      return new Promise((resolve, reject) =>
-      {
-        axios.post
       })
     }
-}})
+  }
+})
