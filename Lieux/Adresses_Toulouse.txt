@@ -1,0 +1,57 @@
+1. cite de l'espace
+31500 Toulouse
+43.591080, 1.492557
+
+2. Jardin des Plantes
+31000 Toulouse
+43.596661, 1.450480
+
+3. Les Abattoirs
+Toulouse
+43.604319, 1.429015
+
+4. Basilique Saint-Sernin Toulouse
+43.611226, 1.441631
+
+5. Hippodrome de Toulouse la Cépière Toulouse
+43.590494, 1.405698
+
+6. Stadium TFC
+Îles du Ramier
+31400 Toulouse
+43.583964, 1.433978
+
+7. Place du Capitole
+31000 Toulouse
+43.605349, 1.443422
+
+8. Marché Victor Hugo
+31000 Toulouse
+43.606788, 1.446593
+
+9. Muséum de Toulouse
+31000 Toulouse
+43.594363, 1.449332
+
+10. Grand Rond
+31000 Toulouse
+43.595663, 1.452636
+
+11. Tour de la rue Bida
+31000 Toulouse
+43.598330, 1.451379
+
+12. Jardin Royal
+31000 Toulouse
+43.595593, 1.450044
+
+13. Garonne
+31000 Toulouse
+43.598442, 1.438992
+
+14. pontNeuf
+43.599400, 1.439128
+
+15. Place Saint-Pierre
+31000 Toulouse
+43.603545, 1.435780

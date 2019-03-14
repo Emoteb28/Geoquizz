@@ -1,5 +1,5 @@
 import Vue from "nativescript-vue";
-import LoginPage from "./components/LoginPage";
+import LoginPage from "./LoginPage.vue";
 /*import axios from 'axios';
 
 window.axios = axios.create({
@@ -9,14 +9,22 @@ window.axios = axios.create({
 });
 */
 
+import Home from "./Home.vue";
+
 new Vue({
 
     template: `
         <Frame>
+
             <LoginPage />
         </Frame>`,
 
     components: {
         LoginPage
+            <Home />
+        </Frame>`,
+
+    components: {
+        Home
     }
 }).$start();
