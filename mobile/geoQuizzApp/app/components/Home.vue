@@ -37,19 +37,6 @@
                 </GridLayout>
             </GridLayout>
         </GridLayout>
-    <Page class="page">
-        <ActionBar class="action-bar">
-            <Label class="action-bar-title" text="GeoQuizz"></Label>
-        </ActionBar>
-
-        <GridLayout rows="auto, *, auto, auto">
-            <StackLayout row="0" orientation="vertical" padding="5">
-
-            </StackLayout>
-            <Image row="1" :src="cameraImage" id="image" stretch="aspectFit" margin="10"/>
-            <TextView row="2" :text="labelText" editable="false"></TextView>>
-            <Button row="3"  text="Take Picture" @tap="onTakePictureTap"  padding="10"/>
-        </GridLayout>
     </Page>
 </template>
 
