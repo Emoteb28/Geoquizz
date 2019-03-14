@@ -51,7 +51,8 @@
                                     }
                                     that.labelText = `Displayed Size: ${actualWidth}x${actualHeight} with scale ${scale}\n` +
                                         `Image Size: ${Math.round(actualWidth / scale)}x${Math.round(actualHeight / scale)}`;
-                                    console.log(`${labelText}`);
+                                    console.log(`${labelText}`);S
+                                    console.log('imageAsset');
                                 });
                             },
                             (err) => {
