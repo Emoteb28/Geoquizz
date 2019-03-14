@@ -22,6 +22,8 @@ $config = [
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '' 
         ],
+        'backoffice' => 'http://api.backoffice.local',
+        'secret' => 'mounach',
         'determineRouteBeforeAppMiddleware' => true,
         'cors' => [
             "methods" => ["GET", "POST", "PUT", "PATCH", "OPTION", "DELETE"],
@@ -39,7 +41,7 @@ $config = [
         'notFoundHandler' => function($c) {
             return function ($req, $resp) use ($c) {
              
-                return \lbs\errors\NotFound::error($req, $resp);
+                return \gq\errors\NotFound::error($req, $resp);
 
             };
         },
@@ -51,7 +53,7 @@ $config = [
         'notAllowedHandler' => function($c) {
             return function (  $req,  $resp, $methods) {
                 
-                return \lbs\errors\NotFound::error($req, $resp, $methods);
+                return \gq\errors\NotFound::error($req, $resp, $methods);
 
             };
         },
@@ -63,7 +65,7 @@ $config = [
         'badRequestHandler' => function($c) {
             return function (  $req,  $resp) {
                 
-                return \lbs\errors\NotFound::error($req, $resp);
+                return \gq\errors\NotFound::error($req, $resp);
 
             };
         },
@@ -75,7 +77,7 @@ $config = [
         'errorHandler' => function ($c) {
             return function ($req, $resp, $exception) use ($c) {
                   
-                return \lbs\errors\NotFound::error($req, $resp, $exception);
+                return \gq\errors\NotFound::error($req, $resp, $exception);
 
             };
         }

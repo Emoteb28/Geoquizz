@@ -1,71 +1,138 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-
 require '../src/vendor/autoload.php';
 
 
-$container = new \Slim\Container(require_once __DIR__ . "/../src/conf/config.php"); 
+/**
+ * Container
+ */
+
+$container = new \Slim\Container(require_once __DIR__ . "/../src/conf/config.php");
 
 $app = new \Slim\App($container);
 
-\lbs\bootstrap\LbsBootstrap::startEloquent($container->settings['config']);
+\gq\bootstrap\GqBootstrap::startEloquent($container->settings['config']);
+
 
 /**
- * cors
+ * CORS Cross-origin resource sharing
  */
 $app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
-  });
-  
-$app->add(\lbs\middlewares\Cors::class . ':checkAndAddCorsHeaders');
+  return $response;
+});
+
+$app->add(\gq\middlewares\Cors::class . ':checkAndAddCorsHeaders');
 
 /**
- * Commandes
- * Toutes les commandes
+ * Compte user
  */
-$app->get('/commandes[/]',
-
-    \lbs\controllers\CommandeController::class . ':getCommandes'
-);
 
 /**
- * Commande par ID
+ * Création du compte d'utilisateur
  */
 
-$app->get('/commandes/{id}[/]',
+$app->post('/register[/]',
 
-    \lbs\controllers\CommandeController::class . ':getCommande'
+    \gq\controllers\UserController::class . ':createUser'
 
 );
 
 /**
- * Les commandes Items
+ * Connexion user
  */
 
- $app->get('/commandes/{id}/items[/]',
+$app->post('/login[/]',
 
-    \lbs\controllers\CommandeController::class . ':getCommandeItems'
+    \gq\controllers\UserController::class . ':loginUser'
 
 );
 
 /**
- * Mise à jour du status de la commande
+ * Recupération des informations user
  */
 
-$app->patch('/commandes/{id}[/]',
+$app->get('/users/{id}[/]',
 
-    \lbs\controllers\CommandeController::class . ':updateStatus'
+    \gq\controllers\UserController::class . ':getUser'
 
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);
+
+/**
+ * Creation de serie
+ */
+$app->post('/series[/]',
+
+    \gq\controllers\SerieController::class . ':createSerie'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);;
+
+
+/**
+ * series
+ * Toutes les series
+ */
+
+$app->get('/series[/]',
+
+    \gq\controllers\SerieController::class . ':getSeries'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
+
+/**
+ * Recuperer une serie par son identifiant
+ */
+$app->get('/series/{id}[/]',
+
+    \gq\controllers\SerieController::class . ':getSerie'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
+
+/**
+ * Creation de photo
+ */
+$app->post('/series/{id}/photos[/]',
+
+    \gq\controllers\PhotoController::class . ':createPhoto'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);;
+
+/**
+ * Recuperer une photo par son identifiant
+ */
+$app->get('/photos/{id}[/]',
+
+    \gq\controllers\PhotoController::class . ':getPhoto'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
+
+/**
+ * photos
+ * Toutes les photos par serie
+ */
+
+$app->get('/series/{id}/photos[/]',
+
+    \gq\controllers\PhotoController::class . ':getPhotos'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
 );
 
 
 /**
- * Lancement de l'application
+ * Run
  */
 $app->run();
-
-
-
-
-
