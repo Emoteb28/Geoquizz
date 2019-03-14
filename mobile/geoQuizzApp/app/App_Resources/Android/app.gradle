@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 // Add your native dependencies here:
 
 // Uncomment to add recyclerview-v7 dependency
@@ -17,6 +19,7 @@ android {
     additionalParameters "--no-version-vectors"
   }
 }
+>>>>>>> origin/master
 
 def settingsGradlePath
 
