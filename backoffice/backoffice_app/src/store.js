@@ -8,34 +8,39 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token: localStorage.getItem('access_token') || null,
+    rtoken: localStorage.getItem('token') || null,
     listSeries: localStorage.getItem('listSeries') || null,
     user: localStorage.getItem('user') || null,
-    photo: localStorage.getItem('photo') || null,
+    photo: localStorage.getItem('photo') || null,    
   },
   mutations: {
-
+    retrieveToken(state, rtoken) {
+      state.token = rtoken
+    }
   },
   actions: {
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
-        axios.post('/login', {
-          email: credentials.email,
-          password: credentials.password,
+        axios.post('login',{}, {
+          auth:
+          {
+            username: credentials.email,
+            password: credentials.password  
+          }
         })
           .then(response => {
-            const token = response.data.access_token
-
-            localStorage.setItem('access_token', token)
-            context.commit('retrieveToken', token)
+            const rtoken = response.data.token
+            localStorage.setItem('token', rtoken)
+            context.commit('retrieveToken', rtoken)
             resolve(response)
-            alert('yoooo')
-            console.log(response.data.access_token)
+            
+            console.log(response)
             // context.commit('addTodo', response.data)
           })
           .catch(error => {
-            console.log(error)
+            // console.log(error)
+            alert(error)        
             reject(error)
           })
       })
