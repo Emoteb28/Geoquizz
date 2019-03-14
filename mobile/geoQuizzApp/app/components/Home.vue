@@ -11,7 +11,7 @@
             <Image row="1" :src="cameraImage" id="image" stretch="aspectFit" margin="10"/>
             <TextView row="2" :text="labelText" editable="false"></TextView>>
             <Button row="3"  text="Take Picture" @tap="onTakePictureTap"  padding="10"/>
-        </GridLayout>
+        </GridLayout>git p
     </Page>
 </template>
 
