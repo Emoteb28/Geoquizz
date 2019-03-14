@@ -8,56 +8,42 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token : localStorage.getItem('access_token') || null,
-    listSeries : localStorage.getItem('listSeries') || null,
-    user : localStorage.getItem('user') || null,
-    photo : localStorage.getItem('photo') || null,   
+    rtoken: localStorage.getItem('token') || null,
+    listSeries: localStorage.getItem('listSeries') || null,
+    user: localStorage.getItem('user') || null,
+    photo: localStorage.getItem('photo') || null,    
   },
   mutations: {
-
+    retrieveToken(state, rtoken) {
+      state.token = rtoken
+    }
   },
   actions: {
-    register(context, data) {
-      return new Promise((resolve, reject) => {
-        axios.post('/register', {
-          fullname: data.name,
-          email: data.email,
-          password: data.password,
-        })
-          .then(response => {
-            resolve(response)
-          })
-          .catch(error => {
-            reject(error)
-          })
-      })
-    },
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
-        axios.post('/users/login', {
-          email: credentials.email,
-          password: credentials.password,
+        axios.post('login',{}, {
+          auth:
+          {
+            username: credentials.email,
+            password: credentials.password  
+          }
         })
           .then(response => {
-            const token = response.data.access_token
-
-            localStorage.setItem('access_token', token)
-            context.commit('retrieveToken', token)
+            const rtoken = response.data.token
+            localStorage.setItem('token', rtoken)
+            context.commit('retrieveToken', rtoken)
             resolve(response)
-            console.log(response);
+            
+            console.log(response)
             // context.commit('addTodo', response.data)
           })
           .catch(error => {
-            console.log(error)
+            // console.log(error)
+            alert(error)        
             reject(error)
           })
-        })
-    },
-    login(context, credentials) {
-      return new Promise((resolve, reject) =>
-      {
-        axios.post
       })
     }
-}})
+  }
+})
