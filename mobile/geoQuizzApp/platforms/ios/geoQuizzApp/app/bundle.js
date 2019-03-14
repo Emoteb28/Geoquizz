@@ -1008,7 +1008,7 @@ new nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     
         
         
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("../node_modules/webpack/buildin/global.js")))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("../node_modules/nativescript-dev-webpack/node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
