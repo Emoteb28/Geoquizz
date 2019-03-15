@@ -19,6 +19,7 @@ services:
     volumes :
       - ./backoffice/api_backoffice:/var/www/api
       - ./backoffice/src:/var/www/src
+      - ./uploads:/var/www/api/uploads
     working_dir : /var/www/src
     networks:
       - gq_network
@@ -38,6 +39,7 @@ services:
     volumes :
       - ./player/api_player:/var/www/api
       - ./player/src:/var/www/src
+      - ./uploads:/var/www/api/uploads
     working_dir : /var/www/src
     networks:
       - gq_network
@@ -59,6 +61,7 @@ services:
     volumes :
       - ./mobile/api_mobile:/var/www/api
       - ./mobile/src:/var/www/src
+      - ./uploads:/var/www/api/uploads
     working_dir : /var/www/src
     networks:
       - gq_network

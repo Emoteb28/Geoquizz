@@ -28,49 +28,51 @@ class PhotoController extends Controller {
             $files = $req->getUploadedFiles();
             $newImage = $files['image'];
 
-            $uniqId = Uuid::uuid4();
-            $ext = explode('.', $newImage->getClientFileName());
-            $name = $uniqId . '.' . strtolower(end($ext));
-
-            $newImage->moveTo("/var/www/api/uploads/".$name);
-
             if($newImage->getError() === UPLOAD_ERR_OK){
+                
+                $uniqId = Uuid::uuid4();
+                $ext = explode('.', $newImage->getClientFileName());
+                $name = $uniqId . '.' . strtolower(end($ext));
+
+                $newImage->moveTo("/var/www/api/uploads/".$name);
 
                 if (!isset($jsonData['desc'])) return $resp->withStatus(400);
                 if (!isset($jsonData['lat'])) return $resp->withStatus(400);
                 if (!isset($jsonData['lng'])) return $resp->withStatus(400); 
 
-                // Create photo
-                $client = new Client([
-                    // Base URL : pour ensuite transmettre des requêtes relatives
-                    'base_uri' =>   $this->container->settings['backoffice'],
-                    // options par défaut pour les requêtes
-                    'timeout' => 2.0,
-                   ]);
 
-                $client->post('/series/'.$args['id'].'/photos/', [
-                    'headers' => [
-                        'Authorization' => $req->getHeader('Authorization')[0]
-                    ],
-                    'multipart' => [
-                        [
-                            'name'     => 'image',
-                            'contents' => fopen("/var/www/api/uploads/".$name, 'r')
-                        ],
-                        [
-                            'name'     => 'desc',
-                            'contents' => filter_var($jsonData['desc'], FILTER_SANITIZE_SPECIAL_CHARS)
-                        ],
-                        [
-                            'name'     => 'lat',
-                            'contents' => filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS)
-                        ],
-                        [
-                            'name'     => 'lng',
-                            'contents' => filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS)
-                        ]
-                    ]
-                ]);
+                $photo = new Photo();
+                $photo->id = $uniqId;
+                $photo->desc = filter_var($jsonData['desc'], FILTER_SANITIZE_SPECIAL_CHARS);
+                $photo->lat = filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
+                $photo->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
+                $photo->url = $name;
+
+                $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+                $photo->serie()->associate($serie);
+                
+
+                // Create photo
+                if($photo->save()) {
+
+                    $data = [
+                        'type' => 'resource',
+                        'meta' => ['date' =>date('d-m-Y')],
+                        'photo' => $photo->toArray()
+                    ];
+
+                    return $this->jsonOutup($resp, 201, $data);
+
+                }else {
+
+                    $data = ['type' => 'resource',
+                    'meta' => ['date' =>date('d-m-Y')],
+                    'message' => 'photo Not Created'
+                    ];
+
+                    return $this->jsonOutup($resp, 400, $data);
+                
+            }
         }
     
         }catch(\Exception $e){

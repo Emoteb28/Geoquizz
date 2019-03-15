@@ -24,6 +24,25 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 
 $app->add(\gq\middlewares\Cors::class . ':checkAndAddCorsHeaders');
 
+/**
+ * Recuperer une serie par son identifiant
+ */
+$app->get('/series/{id}[/]',
+
+    \gq\controllers\SerieController::class . ':getSerie'
+
+);
+
+/**
+ * series
+ * Toutes les series
+ */
+
+$app->get('/series[/]',
+
+    \gq\controllers\SerieController::class . ':getSeries'
+
+);
 
 /**
  * Creation de la partie
@@ -34,13 +53,24 @@ $app->post('/series/{id}/parties[/]',
 
 );
 
-
 /**
- * Creation de la partie
+ * get partie
  */
 $app->get('/parties/{id}[/]',
 
     \gq\controllers\PartieController::class . ':getPartie'
+
+)->add(
+  \gq\middlewares\Token::class . ':check'
+);
+
+
+/**
+ * get photos
+ */
+$app->get('/parties/{id}/photos[/]',
+
+    \gq\controllers\PartieController::class . ':getPhotos'
 
 )->add(
   \gq\middlewares\Token::class . ':check'
