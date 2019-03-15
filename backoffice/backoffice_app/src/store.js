@@ -13,9 +13,17 @@ export default new Vuex.Store({
     user: localStorage.getItem('user') || null,
     photo: localStorage.getItem('photo') || null,    
   },
+  getters : {  
+    getSeries(state){
+      return state.listSeries || null
+    }
+  },
   mutations: {
     retrieveToken(state, rtoken) {
       state.token = rtoken
+    },
+    retrieveSeries(state, listSeries){
+      state.listSeries = listSeries
     }
   },
   actions: {
@@ -33,16 +41,29 @@ export default new Vuex.Store({
             const rtoken = response.data.token
             localStorage.setItem('token', rtoken)
             context.commit('retrieveToken', rtoken)
-            resolve(response)
+            resolve(response)            
             
-            console.log(response)
             // context.commit('addTodo', response.data)
           })
           .catch(error => {
             // console.log(error)
-            alert(error)        
+            alert(error)       
             reject(error)
           })
+      })
+    },
+    retrieveSeries(context, credentials) {
+      return new Promise((resolve, reject) => {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.rtoken
+        axios.get('series').then(response => {
+          const listSeries = response.data.series
+          context.commit('retrieveSeries', listSeries)
+          console.log(response);
+        })
+        .catch(error => {
+            alert(error)
+            reject(error)
+        })
       })
     }
   }

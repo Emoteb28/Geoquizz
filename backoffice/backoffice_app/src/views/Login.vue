@@ -47,7 +47,7 @@ export default {
       })
         .then(response => {
           if (this.$store.state.token != null) {
-            this.$router.push({ name: 'home' })
+            this.$router.push({ name: 'series' })
             alert(this.$store.state.token)
           }
           

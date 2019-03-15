@@ -1,6 +1,6 @@
 <template>
   <v-card height="200px">
-    <v-bottom-nav
+    <v-bottom-nav x12 sm3
       :active.sync="bottomNav"
       :color="color"
       :value="true"
@@ -14,11 +14,17 @@
       </v-btn>
 
       <v-btn dark>
-        <span>Paramétres</span>
-        <v-icon>music_note</v-icon>
+        <span>Paramétres de partie</span>
+        <v-icon></v-icon>
       </v-btn>
+      <v-flex xs12 sm4>
+            <v-btn flat icon color="dark">
+              <v-icon>logout</v-icon>
+            </v-btn>
+      </v-flex>
 
     </v-bottom-nav>
+
   </v-card>
 </template>
 
