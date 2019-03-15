@@ -39,17 +39,7 @@
 
 <script>
 // A stub for a service that authenticates users.
-const userService = {
-    register(user) {
-        return Promise.resolve(user);
-    },
-    login(user) {
-        return Promise.resolve(user);
-    },
-    resetPassword(email) {
-        return Promise.resolve(email);
-    }
-};
+
 
 
 import Home from './Home.vue'
@@ -70,93 +60,7 @@ export default {
             this.isLoggingIn = !this.isLoggingIn;
         },
 
-        submit() {
-            if (!this.user.email || !this.user.password) {
-                this.alert(
-                    "Please provide both an email address and password."
-                );
-                return;
-            }
-            if (this.isLoggingIn) {
-                this.login();
-            } else {
-                this.register();
-            }
-        },
 
-        login() {
-            userService
-                .login(this.user)
-                .then(() => {
-                    this.$navigateTo(HomePage);
-                })
-                .catch(() => {
-                    this.alert("Unfortunately we could not find your account.");
-                });
-        },
-
-        register() {
-            if (this.user.password != this.user.confirmPassword) {
-                this.alert("Your passwords do not match.");
-                return;
-            }
-
-            userService
-                .register(this.user)
-                .then(() => {
-                    this.alert("Your account was successfully created.");
-                    this.isLoggingIn = true;
-                })
-                .catch(() => {
-                    this.alert(
-                        "Unfortunately we were unable to create your account."
-                    );
-                });
-        },
-
-        forgotPassword() {
-            prompt({
-                title: "Forgot Password",
-                message:
-                    "Enter the email address you used to register for APP NAME to reset your password.",
-                inputType: "email",
-                defaultText: "",
-                okButtonText: "Ok",
-                cancelButtonText: "Cancel"
-            }).then(data => {
-                if (data.result) {
-                    userService
-                        .resetPassword(data.text.trim())
-                        .then(() => {
-                            this.alert(
-                                "Your password was successfully reset. Please check your email for instructions on choosing a new password."
-                            );
-                        })
-                        .catch(() => {
-                            this.alert(
-                                "Unfortunately, an error occurred resetting your password."
-                            );
-                        });
-                }
-            });
-        },
-
-        focusPassword() {
-            this.$refs.password.nativeView.focus();
-        },
-        focusConfirmPassword() {
-            if (!this.isLoggingIn) {
-                this.$refs.confirmPassword.nativeView.focus();
-            }
-        },
-
-        alert(message) {
-            return alert({
-                title: "APP NAME",
-                okButtonText: "OK",
-                message: message
-            });
-        }
     }
 };
 </script>
