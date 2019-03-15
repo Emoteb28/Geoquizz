@@ -23,7 +23,7 @@
 					<StackLayout class="hr-light" />
 				</StackLayout>
 
-				<Button :text="isLoggingIn ? 'Sign In' : 'Sign Up'" @tap="$navigateTo(Homes)" class="btn btn-primary m-t-20" />
+				<Button :text="isLoggingIn ? 'Sign In' : 'Sign Up'" @tap="" class="btn btn-primary m-t-20" />
 				<Label v-show="isLoggingIn" text="Mot de passe perdu?" class="login-label" @tap="forgotPassword" />
 			</StackLayout>
 
