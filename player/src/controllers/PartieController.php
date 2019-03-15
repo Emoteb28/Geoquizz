@@ -37,8 +37,25 @@ class PartieController extends Controller {
             $serie = Serie::where('id','=',$args['id'])->firstOrFail();
             $partie->serie()->associate($serie);
 
+            $photos = $serie->photos()->get();
+
+            $tab = [];
+
+            foreach ($photos as $key => $photo) {
+                $tab[] = $photo;
+            }
+
+            shuffle($tab);
+            $tabIds = [];
+
+            foreach( array_slice($tab,0,10) as $photo){
+                $tabIds[] = $photo->id;
+            }
+
             // Create Partie
             if($partie->save()) {
+
+                $partie->photos()->sync($tabIds);
 
                 $data = [
                     'type' => 'resource',
@@ -84,6 +101,48 @@ class PartieController extends Controller {
                     'partie' => $partie->toArray(),
                     "links"=> [
                         "self" => [ "href" => "/parties/".$args['id']."/" ]
+                    ]
+            ];
+            
+
+            return $this->jsonOutup($resp, 200, $data);
+
+
+        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+
+            $data = [
+                'type' => 'error',
+                'error' => 404,
+                'message' => 'ressource non disponible : /partie/ '. $args['id']
+            ];
+
+            return $this->jsonOutup($resp, 404, $data);
+
+
+        }
+
+    }
+
+
+    /**
+     * Les photos par ID partie
+     * @param $req
+     * @param $resp
+     * @param $args
+     */
+    public function getPhotos($req, $resp, $args){
+
+        try{
+
+            $partie = Partie::where('id','=',$args['id'])->firstOrFail();
+            $photos = $partie->photos()->get();
+         
+                $data = [
+                    'type' => 'resource',
+                    'date' => date('d-m-Y'),
+                    'photos' => $photos->toArray(),
+                    "links"=> [
+                        "self" => [ "href" => "/parties/".$args['id']."/photos/" ]
                     ]
             ];
             
