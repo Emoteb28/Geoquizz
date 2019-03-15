@@ -1,1 +1,3 @@
 npm i nativescript-camera --save
+npm install vuex --save
+tns plugin add nativescript-localstorage

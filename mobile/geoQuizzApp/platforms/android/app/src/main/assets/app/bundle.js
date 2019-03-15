@@ -261,20 +261,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 // A stub for a service that authenticates users.
-const userService = {
-  register(user) {
-    return Promise.resolve(user);
-  },
-
-  login(user) {
-    return Promise.resolve(user);
-  },
-
-  resetPassword(email) {
-    return Promise.resolve(email);
-  }
-
-};
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data() {
@@ -292,78 +278,6 @@ const userService = {
   methods: {
     toggleForm() {
       this.isLoggingIn = !this.isLoggingIn;
-    },
-
-    submit() {
-      if (!this.user.email || !this.user.password) {
-        this.alert("Please provide both an email address and password.");
-        return;
-      }
-
-      if (this.isLoggingIn) {
-        this.login();
-      } else {
-        this.register();
-      }
-    },
-
-    login() {
-      userService.login(this.user).then(() => {
-        this.$navigateTo(HomePage);
-      }).catch(() => {
-        this.alert("Unfortunately we could not find your account.");
-      });
-    },
-
-    register() {
-      if (this.user.password != this.user.confirmPassword) {
-        this.alert("Your passwords do not match.");
-        return;
-      }
-
-      userService.register(this.user).then(() => {
-        this.alert("Your account was successfully created.");
-        this.isLoggingIn = true;
-      }).catch(() => {
-        this.alert("Unfortunately we were unable to create your account.");
-      });
-    },
-
-    forgotPassword() {
-      prompt({
-        title: "Forgot Password",
-        message: "Enter the email address you used to register for APP NAME to reset your password.",
-        inputType: "email",
-        defaultText: "",
-        okButtonText: "Ok",
-        cancelButtonText: "Cancel"
-      }).then(data => {
-        if (data.result) {
-          userService.resetPassword(data.text.trim()).then(() => {
-            this.alert("Your password was successfully reset. Please check your email for instructions on choosing a new password.");
-          }).catch(() => {
-            this.alert("Unfortunately, an error occurred resetting your password.");
-          });
-        }
-      });
-    },
-
-    focusPassword() {
-      this.$refs.password.nativeView.focus();
-    },
-
-    focusConfirmPassword() {
-      if (!this.isLoggingIn) {
-        this.$refs.confirmPassword.nativeView.focus();
-      }
-    },
-
-    alert(message) {
-      return alert({
-        title: "APP NAME",
-        okButtonText: "OK",
-        message: message
-      });
     }
 
   }
@@ -890,11 +804,7 @@ var render = function() {
               _c("Button", {
                 staticClass: "btn btn-primary m-t-20",
                 attrs: { text: _vm.isLoggingIn ? "Sign In" : "Sign Up" },
-                on: {
-                  tap: function($event) {
-                    _vm.$navigateTo(_vm.Homes)
-                  }
-                }
+                on: { tap: function($event) {} }
               }),
               _c("Label", {
                 directives: [
@@ -1227,6 +1137,8 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("nativescript-vue");
 /* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nativescript_vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_LoginPage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./components/LoginPage.vue");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./store.js");
+/* harmony import */ var _mixins_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./mixins/utils.js");
 
         let applicationCheckPlatform = __webpack_require__("tns-core-modules/application");
         if (applicationCheckPlatform.android && !global["__snapshot"]) {
@@ -1246,14 +1158,7 @@ __webpack_require__("tns-core-modules/ui/frame/activity");
         __webpack_require__("tns-core-modules/bundle-entry-points");
         
 
-/*import axios from 'axios';
 
-window.axios = axios.create({
-    baseURL: 'http://api.mobile.local:10082',
-    params : { token : false },
-    headers: { Authorization : 'Token token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkubW9iaWxlLmxvY2FsIiwiYXVkIjoiaHR0cDpcL1wvYXBpLm1vYmlsZS5sb2NhbCIsImlhdCI6MTU1MjQ5OTM5OSwiZXhwIjoxNTUyNTAyOTk5LCJ1aWQiOjIsInVtYWlsIjoiY3Jpc3RpYW5pQHRlc3QuZnIiLCJsdmwiOjF9.YUMNEjfe2bGmVgJCwFARkdGIHV5UOwIjxDCu4U9SW7eDqcaHtl-sJqQByaPSDQHZjQbYEAsNrPYH8yaGXP1EtA'}
-});
-*/
 
 new nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   template: `
@@ -1261,6 +1166,8 @@ new nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a({
             <LoginPage />
         </Frame>`,
   components: {
+    utils: _mixins_utils__WEBPACK_IMPORTED_MODULE_3__["utils"],
+    store: _store__WEBPACK_IMPORTED_MODULE_2__["store"],
     LoginPage: _components_LoginPage__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 }).$start();
@@ -1502,6 +1409,85 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./mixins/utils.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "utils", function() { return utils; });
+let localStorage = __webpack_require__("../node_modules/nativescript-localstorage/localstorage.js");
+
+const axios = __webpack_require__("../node_modules/axios/index.js");
+
+const utils = {
+  methods: {
+    retrieveToken(context, credentials) {
+      return new Promise((resolve, reject) => {
+        axios.post('login', {}, {
+          auth: {
+            username: credentials.email,
+            password: credentials.password
+          }
+        }).then(response => {
+          const rtoken = response.data.token;
+          localStorage.setItem('token', rtoken);
+          context.commit('retrieveToken', rtoken);
+          resolve(response);
+          console.log(response); // context.commit('addTodo', response.data)
+        }).catch(error => {
+          // console.log(error)
+          alert(error);
+          reject(error);
+        });
+      });
+    }
+
+  }
+};
+
+/***/ }),
+
+/***/ "./package.json":
+/***/ (function(module) {
+
+module.exports = {"main":"app.js","android":{"v8Flags":"--expose_gc"}};
+
+/***/ }),
+
+/***/ "./store.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("nativescript-vue");
+/* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nativescript_vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("../node_modules/vuex/dist/vuex.esm.js");
+
+
+
+let localStorage = __webpack_require__("../node_modules/nativescript-localstorage/localstorage.js");
+
+const axios = __webpack_require__("../node_modules/axios/index.js");
+
+axios.defaults.baseURL = 'http://api.backoffice.local:10080/';
+nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["Store"]({
+  state: {
+    rtoken: localStorage.getItem('token') || null,
+    listSeries: localStorage.getItem('listSeries') || null,
+    user: localStorage.getItem('user') || null,
+    photo: localStorage.getItem('photo') || null
+  },
+  mutations: {
+    retrieveToken(state, rtoken) {
+      state.token = rtoken;
+    }
+
+  }
+}));
+
+/***/ }),
+
 /***/ "nativescript-camera":
 /***/ (function(module, exports) {
 
@@ -1527,6 +1513,20 @@ module.exports = require("tns-core-modules/application");
 /***/ (function(module, exports) {
 
 module.exports = require("tns-core-modules/bundle-entry-points");
+
+/***/ }),
+
+/***/ "tns-core-modules/debugger/devtools-elements.js":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/debugger/devtools-elements.js");
+
+/***/ }),
+
+/***/ "tns-core-modules/file-system/file-system-access":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/file-system/file-system-access");
 
 /***/ }),
 
