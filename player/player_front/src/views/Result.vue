@@ -12,6 +12,7 @@
                   <h1 class="size" >{{ partie.score }}</h1>
 
                   <b-button  class="mx-auto marg" @click="keep" type="submit" variant="primary">Keep</b-button>
+                  <h1></h1>
                   <b-button  class="mx-auto" id="btn3" to="/series"  type="submit" variant="primary">go to menu</b-button>
             </b-col>
             <b-col></b-col>
