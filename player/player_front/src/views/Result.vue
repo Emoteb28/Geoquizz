@@ -3,21 +3,22 @@
  <b-container>
 
       <div class="mx-auto top" >
-        
           
           <b-row class="text-center">
             <b-col></b-col>
-            <b-col cols="8">
+            <b-col class="score" cols="8">
 
-                  <h1>Your Score</h1>
-                  <h1>{{ partie.score }}</h1>
+                  <h1 class="size">Your Score</h1>
+                  <h1 class="size" >{{ partie.score }}</h1>
 
-                  <b-button  class="mx-auto" @click="keep" type="submit" variant="primary">Keep</b-button>
+                  <b-button  class="mx-auto marg" @click="keep" type="submit" variant="primary">Keep</b-button>
+                  <b-button  class="mx-auto" id="btn3" to="/series"  type="submit" variant="primary">go to menu</b-button>
             </b-col>
             <b-col></b-col>
           </b-row>
         
         </div>
+
 </b-container>
 
 </template>
@@ -59,6 +60,18 @@ export default {
 
 .top {
   margin-top: 100px;
+}
+
+.size {
+  font-size: 7em;
+}
+
+#btn3 {
+  margin-left: 10px;
+}
+
+.marg {
+  margin-right: 10px;
 }
 
 </style>
