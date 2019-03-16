@@ -99,13 +99,24 @@ $app->get('/series/{id}[/]',
 /**
  * Creation de photo
  */
-$app->post('/series/{id}/photos[/]',
+$app->post('/photos[/]',
 
     \gq\controllers\PhotoController::class . ':createPhoto'
 
 )->add(
     \gq\middlewares\Token::class . ':checkJwt'
-);;
+);
+
+/**
+ * set photo to serie
+ */
+$app->post('/series/{id}/photos[/]',
+
+    \gq\controllers\PhotoController::class . ':setPhotoToSerie'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);
 
 /**
  * Recuperer une photo par son identifiant

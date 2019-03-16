@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Game from './views/Game.vue'
 import Series from './views/Series.vue'
 import Start from './views/Start.vue'
+import Result from './views/Result.vue'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/game/:id',
       name: 'game',
       component: Game
+    },
+    {
+      path: '/result/:id',
+      name: 'result',
+      component: Result
     }
   ]
 })

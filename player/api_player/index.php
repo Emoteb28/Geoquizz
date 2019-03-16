@@ -64,6 +64,17 @@ $app->get('/parties/{id}[/]',
   \gq\middlewares\Token::class . ':check'
 );
 
+/**
+ * update partie
+ */
+$app->patch('/parties/{id}[/]',
+
+    \gq\controllers\PartieController::class . ':updatePartie'
+
+)->add(
+  \gq\middlewares\Token::class . ':check'
+);
+
 
 /**
  * get photos

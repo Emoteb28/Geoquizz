@@ -48,10 +48,6 @@ class PhotoController extends Controller {
                 $photo->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
                 $photo->url = $name;
 
-                $serie = Serie::where('id','=',$args['id'])->firstOrFail();
-                $photo->serie()->associate($serie);
-                
-
                 // Create photo
                 if($photo->save()) {
 
@@ -86,6 +82,56 @@ class PhotoController extends Controller {
 
         }
     }
+
+    /**
+     * setPhotoToSerie
+     * @param $req
+     * @param $resp
+     * @param $args
+     * @return mixed|void
+     */
+    public function setPhotoToSerie($req, $resp, $args){
+        try{
+            //------
+            $jsonData = $req->getParsedBody();
+            
+ 
+                if (!isset($jsonData['photo'])) return $resp->withStatus(400);
+
+                $photoId = filter_var($jsonData['photo'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+                $photo = Photo::where('id','=', $photoId)->firstOrFail();
+
+                $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+                
+                $photo->serie()->associate($serie);
+                
+                // Create photo
+                if($photo->save()) {
+                    $data = [
+                        'type' => 'resource',
+                        'meta' => ['date' =>date('d-m-Y')],
+                        'photo' => $photo->toArray()
+                    ];
+                    return $this->jsonOutup($resp, 201, $data);
+                }else {
+                    $data = ['type' => 'resource',
+                    'meta' => ['date' =>date('d-m-Y')],
+                    'message' => 'photo Not set to serie'
+                    ];
+                    return $this->jsonOutup($resp, 400, $data);
+                
+            }
+    
+        }catch(\Exception $e){
+            $data = ['type' => 'resource',
+                'meta' => ['date' =>date('d-m-Y')],
+                'message' => $e->getMessage()
+                ];
+                return $this->jsonOutup($resp, 400, $data);
+        }
+    }
+
 
     /**
      * Serie
