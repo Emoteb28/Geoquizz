@@ -220,7 +220,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Home_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./components/Home.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("../node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Home_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./components/Home.vue");
 //
 //
 //
@@ -262,10 +264,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 // A stub for a service that authenticates users.
 
+const instance = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
+  baseURL: 'http://26f2027a.ngrok.io'
+});
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data() {
     return {
-      Homes: _Home_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+      Homes: _Home_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
       isLoggingIn: true,
       user: {
         email: "",
@@ -278,6 +284,28 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     toggleForm() {
       this.isLoggingIn = !this.isLoggingIn;
+    },
+
+    login() {
+      return new Promise((resolve, reject) => {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('login', {}, {
+          auth: {
+            username: this.user.email,
+            password: this.user.password
+          }
+        }).then(response => {
+          const rtoken = response.data.token;
+          localStorage.setItem('token', rtoken);
+          this.$store.commit('retrieveToken', rtoken);
+          resolve(response);
+          alert(response.data);
+          console.log(response); // context.commit('addTodo', response.data)
+        }).catch(error => {
+          // console.log(error)
+          alert(error);
+          reject(error);
+        });
+      });
     }
 
   }
@@ -804,7 +832,7 @@ var render = function() {
               _c("Button", {
                 staticClass: "btn btn-primary m-t-20",
                 attrs: { text: _vm.isLoggingIn ? "Sign In" : "Sign Up" },
-                on: { tap: function($event) {} }
+                on: { tap: _vm.login }
               }),
               _c("Label", {
                 directives: [
@@ -1137,8 +1165,9 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("nativescript-vue");
 /* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nativescript_vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_LoginPage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./components/LoginPage.vue");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./store.js");
-/* harmony import */ var _mixins_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./mixins/utils.js");
+/* harmony import */ var _mixins_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./mixins/utils.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./store.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("../node_modules/vuex/dist/vuex.esm.js");
 
             __webpack_require__("../node_modules/nativescript-dev-webpack/load-application-css-regular.js")();
             
@@ -1153,14 +1182,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a.mixin(_mixins_utils__WEBPACK_IMPORTED_MODULE_2__["utils"]);
+nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_4__["default"]);
 new nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   template: `
         <Frame>
             <LoginPage />
         </Frame>`,
   components: {
-    utils: _mixins_utils__WEBPACK_IMPORTED_MODULE_3__["utils"],
-    store: _store__WEBPACK_IMPORTED_MODULE_2__["store"],
+    utils: _mixins_utils__WEBPACK_IMPORTED_MODULE_2__["utils"],
+    store: _store__WEBPACK_IMPORTED_MODULE_3__["default"],
     LoginPage: _components_LoginPage__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 }).$start();
@@ -1407,15 +1439,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "utils", function() { return utils; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("../node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 let localStorage = __webpack_require__("../node_modules/nativescript-localstorage/localstorage.js");
 
-const axios = __webpack_require__("../node_modules/axios/index.js");
 
+const instance = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
+  baseURL: 'http://26f2027a.ngrok.io'
+});
 const utils = {
   methods: {
     retrieveToken(context, credentials) {
       return new Promise((resolve, reject) => {
-        axios.post('login', {}, {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('login', {}, {
           auth: {
             username: credentials.email,
             password: credentials.password
@@ -1454,16 +1490,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("nativescript-vue");
 /* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nativescript_vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("../node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("../node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 
 let localStorage = __webpack_require__("../node_modules/nativescript-localstorage/localstorage.js");
 
-const axios = __webpack_require__("../node_modules/axios/index.js");
-
-axios.defaults.baseURL = 'http://api.backoffice.local:10080/';
-nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["Store"]({
+nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+/* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     rtoken: localStorage.getItem('token') || null,
     listSeries: localStorage.getItem('listSeries') || null,
@@ -1473,6 +1509,29 @@ nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORT
   mutations: {
     retrieveToken(state, rtoken) {
       state.token = rtoken;
+    }
+
+  },
+  actions: {
+    retrieveToken(context, credentials) {
+      return new Promise((resolve, reject) => {
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('login', {}, {
+          auth: {
+            username: credentials.email,
+            password: credentials.password
+          }
+        }).then(response => {
+          const rtoken = response.data.token;
+          localStorage.setItem('token', rtoken);
+          context.commit('retrieveToken', rtoken);
+          resolve(response);
+          console.log(response); // context.commit('addTodo', response.data)
+        }).catch(error => {
+          // console.log(error)
+          alert(error);
+          reject(error);
+        });
+      });
     }
 
   }
