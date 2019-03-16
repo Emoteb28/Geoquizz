@@ -1,5 +1,11 @@
 let localStorage = require( "nativescript-localstorage" );
-const axios = require('axios');export const utils = {
+import axios from 'axios';
+
+const instance = axios.create({
+    baseURL: 'http://68c37ddd.ngrok.io'
+});
+
+export const utils = {
     methods: {
         retrieveToken(context, credentials) {
             return new Promise((resolve, reject) => {

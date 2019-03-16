@@ -23,7 +23,7 @@
 					<StackLayout class="hr-light" />
 				</StackLayout>
 
-				<Button :text="isLoggingIn ? 'Sign In' : 'Sign Up'" @tap="" class="btn btn-primary m-t-20" />
+				<Button :text="isLoggingIn ? 'Sign In' : 'Sign Up'" @tap="login" class="btn btn-primary m-t-20" />
 				<Label v-show="isLoggingIn" text="Mot de passe perdu?" class="login-label" @tap="forgotPassword" />
 			</StackLayout>
 
@@ -38,11 +38,10 @@
 </template>
 
 <script>
-// A stub for a service that authenticates users.
-
-
-
 import Home from './Home.vue'
+import axios from 'axios';
+
+
 export default {
     data() {
         return {
@@ -59,6 +58,30 @@ export default {
         toggleForm() {
             this.isLoggingIn = !this.isLoggingIn;
         },
+		login() {
+			return new Promise((resolve, reject) => {
+				axios.post('login',{}, {
+					auth:
+							{
+								username: this.user.email,
+								password: this.user.password
+							}
+				})
+						.then(response => {
+							const rtoken = response.data.token
+							localStorage.setItem('token', rtoken)
+							resolve(response)
+							alert(response.data)
+							console.log(response)
+							//context.commit('addTodo', response.data)
+						})
+						.catch(error => {
+							// console.log(error)
+							alert(error)
+							reject(error)
+						})
+			})
+		},
 
 
     }
