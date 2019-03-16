@@ -51,6 +51,17 @@ export const Utils = {
               .catch(error => {
                 console.log(error)
               })
+          },
+          updatePartie( data ) {
+            return new Promise((resolve, reject) => {
+                window.axios.patch('parties/'+ data.id ,{
+                  score: data.score
+              }).then(response => {
+                  resolve(response)
+              }).catch(error => {
+                  reject(error)
+              });
+            })
           }
     }
 }

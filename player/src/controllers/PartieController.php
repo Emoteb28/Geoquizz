@@ -123,6 +123,66 @@ class PartieController extends Controller {
 
     }
 
+    /**
+     * Creation partie
+     * @param $req
+     * @param $resp
+     * @param $args
+     * @return mixed|void
+     */
+
+    public function updatePartie($req, $resp, $args){
+
+        try{
+
+            //------
+
+            $jsonData = $req->getParsedBody();
+
+            if (!isset($jsonData['score']) && !isset($jsonData['status'])) return $response->withStatus(400); 
+
+            $partie = Partie::where('id','=',$args['id'])->firstOrFail();
+
+            if(isset($jsonData['score']))
+                $partie->score = filter_var($jsonData['score'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+            if(isset($jsonData['status']))
+                $partie->status = filter_var($jsonData['status'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+            // update Partie
+            if($partie->save()) {
+
+                $data = [
+                    'type' => 'resource',
+                    'meta' => ['date' =>date('d-m-Y')],
+                    'partie' => $partie->toArray()
+                ];
+
+                return $this->jsonOutup($resp, 201, $data);
+
+            }else {
+
+                $data = ['type' => 'resource',
+                'meta' => ['date' =>date('d-m-Y')],
+                'message' => 'Partie Not updated'
+                ];
+
+                return $this->jsonOutup($resp, 400, $data);
+            
+        }
+    
+        }catch(\Exception $e){
+
+            $data = ['type' => 'resource',
+                'meta' => ['date' =>date('d-m-Y')],
+                'message' => $e->getMessage()
+                ];
+
+                return $this->jsonOutup($resp, 400, $data);
+
+        }
+    }
+
 
     /**
      * Les photos par ID partie
