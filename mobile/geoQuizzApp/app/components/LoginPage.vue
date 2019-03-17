@@ -41,7 +41,6 @@
 import Home from './Home.vue'
 import axios from 'axios';
 
-
 export default {
     data() {
         return {
@@ -71,7 +70,7 @@ export default {
 							const rtoken = response.data.token
 							localStorage.setItem('token', rtoken)
 							resolve(response)
-							alert(response.data)
+							alert();
 							console.log(response)
 							//context.commit('addTodo', response.data)
 						})
@@ -82,7 +81,6 @@ export default {
 						})
 			})
 		},
-
 
     }
 };

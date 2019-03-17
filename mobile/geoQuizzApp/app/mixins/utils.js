@@ -2,7 +2,7 @@ let localStorage = require( "nativescript-localstorage" );
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'http://68c37ddd.ngrok.io'
+    baseURL: 'http://e055643d.ngrok.io'
 });
 
 export const utils = {

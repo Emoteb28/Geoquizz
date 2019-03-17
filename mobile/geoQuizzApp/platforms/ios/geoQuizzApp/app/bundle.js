@@ -200,6 +200,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 //import de la caméra
 
 
@@ -220,9 +223,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("../node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Home_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./components/Home.vue");
+/* harmony import */ var _Home_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./components/Home.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("../node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -262,16 +265,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-// A stub for a service that authenticates users.
 
-const instance = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-  baseURL: 'http://26f2027a.ngrok.io'
-});
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data() {
     return {
-      Homes: _Home_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+      Homes: _Home_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
       isLoggingIn: true,
       user: {
         email: "",
@@ -288,7 +287,7 @@ const instance = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
 
     login() {
       return new Promise((resolve, reject) => {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('login', {}, {
+        axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('login', {}, {
           auth: {
             username: this.user.email,
             password: this.user.password
@@ -296,10 +295,9 @@ const instance = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
         }).then(response => {
           const rtoken = response.data.token;
           localStorage.setItem('token', rtoken);
-          this.$store.commit('retrieveToken', rtoken);
           resolve(response);
-          alert(response.data);
-          console.log(response); // context.commit('addTodo', response.data)
+          alert();
+          console.log(response); //context.commit('addTodo', response.data)
         }).catch(error => {
           // console.log(error)
           alert(error);
@@ -320,8 +318,21 @@ const instance = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TakePhoto_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./components/TakePhoto.vue");
 /* harmony import */ var _LoginPage_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./components/LoginPage.vue");
-/* harmony import */ var nativescript_camera__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("nativescript-camera");
-/* harmony import */ var nativescript_camera__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(nativescript_camera__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var nativescript_geolocation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("nativescript-geolocation");
+/* harmony import */ var nativescript_geolocation__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(nativescript_geolocation__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("tns-core-modules/ui/enums");
+/* harmony import */ var tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var nativescript_camera__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("nativescript-camera");
+/* harmony import */ var nativescript_camera__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(nativescript_camera__WEBPACK_IMPORTED_MODULE_4__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -378,9 +389,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data() {
     return {
+      lat: "",
+      lon: "",
+      locations: [],
       saveToGallery: false,
       keepAspectRatio: true,
       width: 320,
@@ -396,8 +412,8 @@ __webpack_require__.r(__webpack_exports__);
     onTakePictureTap: function (args) {
       let page = args.object.page;
       let that = this;
-      Object(nativescript_camera__WEBPACK_IMPORTED_MODULE_2__["requestPermissions"])().then(() => {
-        Object(nativescript_camera__WEBPACK_IMPORTED_MODULE_2__["takePicture"])({
+      Object(nativescript_camera__WEBPACK_IMPORTED_MODULE_4__["requestPermissions"])().then(() => {
+        Object(nativescript_camera__WEBPACK_IMPORTED_MODULE_4__["takePicture"])({
           width: that.width,
           height: that.height,
           keepAspectRatio: that.keepAspectRatio,
@@ -425,7 +441,27 @@ __webpack_require__.r(__webpack_exports__);
           console.log("Error -> " + err.message);
         });
       }, () => alert('permissions rejected'));
+    },
+
+    getLocation() {
+      nativescript_geolocation__WEBPACK_IMPORTED_MODULE_2__["getCurrentLocation"]({
+        desiredAccuracy: tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_3__["Accuracy"].high,
+        maximumAge: 5000,
+        timeout: 20000
+      }).then(res => {
+        this.lat = res.latitude;
+        this.lon = res.longitude; // get the address (REQUIRES YOUR OWN GOOGLE MAP API KEY!)
+
+        fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + res.latitude + "," + res.longitude + "&key=YOUR-API-KEY").then(response => response.json()).then(r => {
+          this.addr = r.results[0].formatted_address;
+        });
+      });
+    },
+
+    mounted() {
+      nativescript_geolocation__WEBPACK_IMPORTED_MODULE_2__["enableLocationRequest"]();
     }
+
   }
 });
 
@@ -1079,23 +1115,42 @@ var render = function() {
             ],
             1
           ),
-          _c("StackLayout", {
-            attrs: { row: "1", orientation: "vertical", padding: "5" }
-          }),
+          _c(
+            "StackLayout",
+            { attrs: { row: "1", orientation: "vertical", padding: "" } },
+            [
+              _c("Button", {
+                attrs: {
+                  text: "Get My Location",
+                  "-": "",
+                  padding: "13px",
+                  row: "3",
+                  margin: "35"
+                },
+                on: { tap: _vm.getLocation }
+              }),
+              _c("Label", { attrs: { text: "Latitude: " + _vm.lat } }),
+              _c("Label", { attrs: { text: "Longitude: " + _vm.lon } })
+            ],
+            1
+          ),
           _c("Image", {
             attrs: {
               row: "2",
               src: _vm.cameraImage,
               id: "image",
               stretch: "aspectFit",
-              margin: "10"
+              margin: "8",
+              width: "600px"
             }
           }),
           _c("Button", {
-            attrs: { row: "3", text: "Ajouter à une série", padding: "10" }
-          }),
-          _c("Button", {
-            attrs: { row: "4", text: "Prendre une photo", padding: "10" },
+            attrs: {
+              row: "4",
+              text: "Prendre une photo",
+              "-": "",
+              padding: "10"
+            },
             on: { tap: _vm.onTakePictureTap }
           })
         ],
@@ -1164,10 +1219,8 @@ webpackEmptyContext.id = "./ sync recursive (root|page)\\.(xml|css|js|ts|scss)$"
 __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("nativescript-vue");
 /* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nativescript_vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_LoginPage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./components/LoginPage.vue");
+/* harmony import */ var _components_TakePhoto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./components/TakePhoto.vue");
 /* harmony import */ var _mixins_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./mixins/utils.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./store.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("../node_modules/vuex/dist/vuex.esm.js");
 
             __webpack_require__("../node_modules/nativescript-dev-webpack/load-application-css-regular.js")();
             
@@ -1181,19 +1234,16 @@ __webpack_require__.r(__webpack_exports__);
         
 
 
-
-
+;
 nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a.mixin(_mixins_utils__WEBPACK_IMPORTED_MODULE_2__["utils"]);
-nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_4__["default"]);
 new nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   template: `
         <Frame>
-            <LoginPage />
+            <TakePhoto />
         </Frame>`,
   components: {
     utils: _mixins_utils__WEBPACK_IMPORTED_MODULE_2__["utils"],
-    store: _store__WEBPACK_IMPORTED_MODULE_3__["default"],
-    LoginPage: _components_LoginPage__WEBPACK_IMPORTED_MODULE_1__["default"]
+    TakePhoto: _components_TakePhoto__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 }).$start();
     
@@ -1445,7 +1495,7 @@ let localStorage = __webpack_require__("../node_modules/nativescript-localstorag
 
 
 const instance = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-  baseURL: 'http://26f2027a.ngrok.io'
+  baseURL: 'http://e055643d.ngrok.io'
 });
 const utils = {
   methods: {
@@ -1482,67 +1532,17 @@ module.exports = {"main":"app.js","android":{"v8Flags":"--expose_gc"}};
 
 /***/ }),
 
-/***/ "./store.js":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("nativescript-vue");
-/* harmony import */ var nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nativescript_vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("../node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("../node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
-let localStorage = __webpack_require__("../node_modules/nativescript-localstorage/localstorage.js");
-
-nativescript_vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
-/* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-  state: {
-    rtoken: localStorage.getItem('token') || null,
-    listSeries: localStorage.getItem('listSeries') || null,
-    user: localStorage.getItem('user') || null,
-    photo: localStorage.getItem('photo') || null
-  },
-  mutations: {
-    retrieveToken(state, rtoken) {
-      state.token = rtoken;
-    }
-
-  },
-  actions: {
-    retrieveToken(context, credentials) {
-      return new Promise((resolve, reject) => {
-        axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('login', {}, {
-          auth: {
-            username: credentials.email,
-            password: credentials.password
-          }
-        }).then(response => {
-          const rtoken = response.data.token;
-          localStorage.setItem('token', rtoken);
-          context.commit('retrieveToken', rtoken);
-          resolve(response);
-          console.log(response); // context.commit('addTodo', response.data)
-        }).catch(error => {
-          // console.log(error)
-          alert(error);
-          reject(error);
-        });
-      });
-    }
-
-  }
-}));
-
-/***/ }),
-
 /***/ "nativescript-camera":
 /***/ (function(module, exports) {
 
 module.exports = require("nativescript-camera");
+
+/***/ }),
+
+/***/ "nativescript-geolocation":
+/***/ (function(module, exports) {
+
+module.exports = require("nativescript-geolocation");
 
 /***/ }),
 
@@ -1571,6 +1571,13 @@ module.exports = require("tns-core-modules/bundle-entry-points");
 /***/ (function(module, exports) {
 
 module.exports = require("tns-core-modules/file-system/file-system-access");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/enums":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/enums");
 
 /***/ }),
 
