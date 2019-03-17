@@ -38,13 +38,22 @@
 
             </GridLayout>
 
-            <StackLayout row="1" orientation="vertical" padding="5">
+
+
+            <StackLayout row="1" orientation="vertical" padding="">
+
+                <Button text="Get My Location" @tap="getLocation"- padding="15px" row="3" margin="40"/>
+                <Label :text="'Latitude: ' + lat" />
+                <Label :text="'Longitude: ' + lon" />
 
             </StackLayout>
-            <Image row="2" :src="cameraImage" id="image" stretch="aspectFit" margin="10"/>
 
-            <Button row="3"  text="Ajouter à une série"   padding="10"/>
-            <Button row="4"  text="Prendre une photo" @tap="onTakePictureTap"  padding="10"/>
+            <Image row="2" :src="cameraImage" id="image" stretch="aspectFit" margin="8" width="600px"/>
+            <Button row="4"  text="Prendre une photo" @tap="onTakePictureTap"  - padding="10"/>
+            <!--<Label :text="item.latitude + ', ' + item.longitude + ', ' + item.altitude" />-->
+
+
+
         </GridLayout>
     </Page>
 </template>
@@ -55,11 +64,17 @@
 
     import TakePhoto from "./TakePhoto.vue";
     import LoginPage from "./LoginPage.vue";
+    import * as geolocation from "nativescript-geolocation";
+    import { Accuracy } from "tns-core-modules/ui/enums";
+
 
     import { takePicture, requestPermissions } from "nativescript-camera";
     export default {
         data() {
             return {
+                lat: "",
+                lon: "",
+                locations: [],
                 saveToGallery: false,
                 keepAspectRatio: true,
                 width: 320,
@@ -87,6 +102,7 @@
                                         scale = nativeImage.getDensity() / android.util.DisplayMetrics.DENSITY_DEFAULT;
                                         actualWidth = nativeImage.getWidth();
                                         actualHeight = nativeImage.getHeight();
+
                                     } else {
                                         scale = nativeImage.scale;
                                         actualWidth = nativeImage.size.width * scale;
@@ -102,9 +118,38 @@
                     },
                     () => alert('permissions rejected')
                 );
-            }
-        }
-    };
+            },
+            getLocation() {
+                geolocation
+                    .getCurrentLocation({
+                        desiredAccuracy: Accuracy.high,
+                        maximumAge: 5000,
+                        timeout: 20000
+                    })
+                    .then(res => {
+                        this.lat = res.latitude;
+                        this.lon = res.longitude;
+
+                        // get the address (REQUIRES YOUR OWN GOOGLE MAP API KEY!)
+                        fetch(
+                            "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+                            res.latitude +
+                            "," +
+                            res.longitude +
+                            "&key=YOUR-API-KEY"
+                        )
+                            .then(response => response.json())
+                            .then(r => {
+                                this.addr = r.results[0].formatted_address;
+                            });
+                    });
+            },
+            mounted() {
+                geolocation.enableLocationRequest();
+            },
+        },
+    }
+
 </script>
 
 

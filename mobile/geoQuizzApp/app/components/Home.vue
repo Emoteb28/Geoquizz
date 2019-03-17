@@ -35,8 +35,11 @@
                     <Label :class="selectedTabview==2?'active':''" row="1"
                            text="DECONNEXION" class="tabviewText"  @tap="$navigateTo(LoginP)"></Label>
                 </GridLayout>
+
             </GridLayout>
+
         </GridLayout>
+
     </Page>
 </template>
 
