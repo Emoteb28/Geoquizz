@@ -1123,9 +1123,9 @@ var render = function() {
                 attrs: {
                   text: "Get My Location",
                   "-": "",
-                  padding: "13px",
+                  padding: "15px",
                   row: "3",
-                  margin: "35"
+                  margin: "40"
                 },
                 on: { tap: _vm.getLocation }
               }),

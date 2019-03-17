@@ -42,7 +42,7 @@
 
             <StackLayout row="1" orientation="vertical" padding="">
 
-                <Button text="Get My Location" @tap="getLocation"- padding="13px" row="3" margin="35"/>
+                <Button text="Get My Location" @tap="getLocation"- padding="15px" row="3" margin="40"/>
                 <Label :text="'Latitude: ' + lat" />
                 <Label :text="'Longitude: ' + lon" />
 
