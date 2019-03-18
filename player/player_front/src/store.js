@@ -9,7 +9,8 @@ export default new Vuex.Store({
     series: false,
     serie: false,
     partie: false,
-    photos: false
+    photos: false,
+    parties: false
   },
   mutations: {
     initialiseStore(state){
@@ -33,6 +34,9 @@ export default new Vuex.Store({
     },
     retrievePhotos(state, photos) {
       state.photos = photos
+    },
+    retrieveParties(state, parties) {
+      state.parties = parties
     },
     setTokenAxios(state) {
       window.axios.defaults.params.token = state.token;

@@ -10,7 +10,7 @@
 
     <b-navbar-nav>
       <b-nav-item to="/series">GAME</b-nav-item>
-      <b-nav-item to="/score">SCORE</b-nav-item>
+      <b-nav-item to="/seriesScore">SCORE</b-nav-item>
     </b-navbar-nav>
 
   </b-collapse>

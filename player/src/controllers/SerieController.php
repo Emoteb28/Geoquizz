@@ -39,6 +39,38 @@ class SerieController extends Controller {
 
 
     /**
+     * 
+     * Toutes les partie d'une serie
+     * @param $req
+     * @param $resp
+     * @param $args
+     */
+    public function getPartiesSerie($req, $resp, $args){
+
+        try{
+
+            $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+            
+            $parties = $serie->parties()->where('status','=',1)
+                                ->orderBy('score', 'DESC')->get();
+
+            $data = [
+                'type' => 'collection',
+                'date' =>date('d-m-Y'),
+                'parties' => $parties->toArray()
+            ];
+
+            return $this->jsonOutup($resp, 200, $data);
+            
+        }catch(\Exception $e){
+
+
+        }
+    }
+
+
+
+    /**
      * Les series par ID
      * @param $req
      * @param $resp

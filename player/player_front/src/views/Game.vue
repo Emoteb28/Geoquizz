@@ -152,6 +152,7 @@ export default {
 
 #image {
   max-width: 630px;
+  max-height: 420px;
   margin: auto;
   padding: 0;
   border-radius: 5%;
@@ -159,6 +160,7 @@ export default {
 
 .top2 {
   margin-top: 2%;
+  font-size: 1.3em;
 }
 
 #row,#row2 {

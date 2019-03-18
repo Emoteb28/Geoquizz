@@ -45,6 +45,17 @@ $app->get('/series[/]',
 );
 
 /**
+ * series
+ * Toutes les parties d'une serie
+ */
+
+$app->get('/series/{id}/parties[/]',
+
+    \gq\controllers\SerieController::class . ':getPartiesSerie'
+
+);
+
+/**
  * Creation de la partie
  */
 $app->post('/series/{id}/parties[/]',
