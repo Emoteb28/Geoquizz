@@ -40,12 +40,12 @@ export default {
     },
     methods: {
       keep(){
-        this.updatePartie({
+        this.keepPartie({
             id: this.$route.params.id,
             status: 1
           })
             .then(res => {
-                this.$router.push('/scores/'+this.$store.state.serie.id);
+                this.$router.push('/score/'+this.$store.state.serie.id);
             });
       }
     },

@@ -23,5 +23,10 @@ class Serie extends \Illuminate\Database\Eloquent\Model {
        {
             return $this->hasMany('gq\models\Photo', 'serie_id');
        }
+
+       public function parties()
+       {
+            return $this->hasMany('gq\models\Partie', 'serie_id');
+       }
 }
 ?>

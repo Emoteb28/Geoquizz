@@ -1,6 +1,6 @@
 <template>
   <b-container class="mx-auto">
-    <h1 class="center">Choose a serie ot start the game</h1>
+    <h1 class="center">Choose a serie to get scores</h1>
     <div class="d-flex align-items-center">
       <b-card
         v-for="serie in series"
@@ -10,7 +10,7 @@
         style="max-width: 15rem;"
         class="mb-2 center mar"
       >
-        <b-button :to="'/start/'+serie.id" variant="primary">Select serie</b-button>
+        <b-button :to="'/score/'+serie.id" variant="primary">Select serie</b-button>
       </b-card>
     </div>
   </b-container>

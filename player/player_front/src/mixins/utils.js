@@ -62,6 +62,27 @@ export const Utils = {
                   reject(error)
               });
             })
+          },
+          keepPartie( data ) {
+            return new Promise((resolve, reject) => {
+                window.axios.patch('parties/'+ data.id ,{
+                  status: data.status
+              }).then(response => {
+                  resolve(response)
+              }).catch(error => {
+                  reject(error)
+              });
+            })
+          },
+          retrieveScores(data) {
+            window.axios.get('series/'+data.id+'/parties')
+              .then(response => {
+                this.$store.commit('retrieveParties', response.data.parties)
+                console.log(response.data)
+              })
+              .catch(error => {
+                console.log(error)
+              })
           }
     }
 }

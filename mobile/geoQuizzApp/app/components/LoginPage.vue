@@ -112,7 +112,7 @@ export default {
 		font-weight: 600;
 		margin-bottom: 70;
 		text-align: center;
-		color: #deepskyblue;
+		color: deepskyblue;
 	}
 
 	.input-field {
