@@ -1,5 +1,5 @@
 import Vue from "nativescript-vue";
-import TakePhoto from "./components/TakePhoto";
+import LoginPage from "./components/LoginPage";
 import {utils} from "./mixins/utils";;
 
 Vue.mixin(utils);
@@ -7,11 +7,11 @@ Vue.mixin(utils);
 new Vue({
     template: `
         <Frame>
-            <TakePhoto />
+            <LoginPage />
         </Frame>`,
 
     components: {
         utils,
-        TakePhoto,
+        LoginPage,
     }
 }).$start();

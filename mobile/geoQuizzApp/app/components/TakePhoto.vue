@@ -21,28 +21,18 @@
                            text="Série" class="tabviewText"></Label>
                 </GridLayout>
                 <GridLayout class="tabview" :class="selectedTabview==1?'active':''"
-                            @tap="showCategory" rows="*,auto" cols="auto" col="1" row="0"
+                            @tap="$navigateTo(TakeP)" rows="*,auto" cols="auto" col="1" row="0"
                             width="34%">
                     <Image v-show="selectedTabview == 1" row="0" class="navIcon"
                            :src="selectedTabview==1?'~/assets/images/category.png':''"/>
                     <Label :class="selectedTabview==1?'active':''" row="1" text="Photos" @tap="$navigateTo(TakeP)" class="tabviewText"></Label>
                 </GridLayout>
-                <GridLayout class="tabview" :class="selectedTabview==2?'active':''"
-                            @tap="showPromos" rows="*,auto" cols="auto" col="2" row="0"
-                            width="33%">
-                    <Image v-show="selectedTabview == 2" row="0" class="navIcon"
-                           :src="selectedTabview==2?'~/assets/images/category.png':''"/>
-                    <Label :class="selectedTabview==2?'active':''" row="1"
-                           text="DECONNEXION" class="tabviewText"  @tap="$navigateTo(LoginP)"></Label>
-                </GridLayout>
 
             </GridLayout>
 
-
-
             <StackLayout row="1" orientation="vertical" padding="">
 
-                <Button text="Get My Location" @tap="getLocation"- padding="15px" row="3" margin="40"/>
+                <Button text="Localisation" @tap="getLocation"- padding="15px" row="3" margin="40"/>
                 <Label :text="'Latitude: ' + lat" />
                 <Label :text="'Longitude: ' + lon" />
 
@@ -130,7 +120,6 @@
                         this.lat = res.latitude;
                         this.lon = res.longitude;
 
-                        // get the address (REQUIRES YOUR OWN GOOGLE MAP API KEY!)
                         fetch(
                             "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
                             res.latitude +

@@ -58,28 +58,30 @@ export default {
             this.isLoggingIn = !this.isLoggingIn;
         },
 		login() {
-			return new Promise((resolve, reject) => {
-				axios.post('login',{}, {
-					auth:
-							{
-								username: this.user.email,
-								password: this.user.password
-							}
-				})
-						.then(response => {
-							const rtoken = response.data.token
-							localStorage.setItem('token', rtoken)
-							resolve(response)
-							alert();
-							console.log(response)
-							//context.commit('addTodo', response.data)
-						})
-						.catch(error => {
-							// console.log(error)
-							alert(error)
-							reject(error)
-						})
-			})
+			// return new Promise((resolve, reject) => {
+			// 	axios.post('login',{}, {
+			// 		auth:
+			// 				{
+			// 					username: this.user.email,
+			// 					password: this.user.password
+			// 				}
+			// 	})
+			// 			.then(response => {
+			// 				const rtoken = response.data.token
+			// 				localStorage.setItem('token', rtoken)
+			// 				resolve(response)
+			// 				alert();
+			// 				console.log(response)
+			// 				//context.commit('addTodo', response.data)
+			// 			})
+			// 			.catch(error => {
+			// 				// console.log(error)
+			// 				alert(error)
+			// 				reject(error)
+			// 			})
+			// })
+
+			// this.$utils.retrieveToken();
 		},
 
     }
