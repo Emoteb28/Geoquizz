@@ -1,46 +1,27 @@
-# GQZ : une application exemple à base de micro-services
-## thématique : 
+# GROUPE LP1 - MOUNACH Mouad - OUALI Salaheddine - KAMATE Isiaka - CRISTIANI Vincent - AYDIN Oktay
 
-## Services
+## Lien de la documentation des API Player - API Mobile - API Backoffice -> 
 
-* 1 service pour l'accès au catalogue,
-* 1 service de prise de commandes,
-* 1 service de suivi des commandes point de vente,
-1 service de gestion du catalogue
+https://documenter.getpostman.com/view/3804503/S17qS9TE
 
-## Bases de données
+## Lien du répertoire Github 
 
-* 1 base de données catalogue
-* 1 base de données commandes
+https://github.com/0mounach0/geoquizz
 
-## GROUPE :
-    MOUNACH MOUAD
-    AYDIN OKTAY
-    CRISTIANI VINCENT
-    OUALI SALAHEDDINE
-    ISSIAKA KAMATE
+## Arborescence
 
-## API DOC :
+A la racine du projet GeoQuizz un dossier 'sql' contenant la base de données GeoQuizz.
 
-Le Bon Sandwich
+Le dossier 'backoffice' contient l'API Backoffice(Dossier 'api_backoffice' et le dossier'src') ainsi que le dossier backoffice_app
 
-I-\ SERVICE DE GESTION DU CATALOGUE :
+Le dossier 'Lieux' contient les adresses des séries ainsi que les photos de chaques séries.(pour tester)
 
-- http://api.catalogue.local:10080
+Le dossier 'mobile' contient l'API mobile(Dossier 'api_mobile' et le dossier 'src'), le dossier 'GeoQuizzAppMobile' est l'application mobile Nativescript-vue,  mobile contient aussi un zip de l'application Nativescript.
 
-II-\ SERVICE DE SUIVI de COMMANDES POINT DE VENTE :
+Le dossier 'player' contient l'API Player(Dossier 'api_player' et le dossier 'src') ainsi que le dossier player_font qui contient les fichiers pour le jeu GeoQuizz
 
-- http://api.store.local:10082
+## Guide d'utilisation
 
-III-\ SERVICE DE PRISE DE COMMANDES :
-
-- http://api.commande.local:10082
-
-# API - Documentation
-
-https://documenter.getpostman.com/view/3804503/S11RKak5
-
-
-# GIT REPO
-
-https://github.com/0mounach0/api_catalogue
+-Création des conteneurs avec le fichier .yml
+-importer le sql de la base de données 
+-Voir les README dans les appications pour leur fonctionnement
