@@ -15,7 +15,7 @@
 
 
 
-      <v-btn dark >
+      <v-btn dark to="/settings">
         <span>Paramétres de partie</span>
         <v-icon>build</v-icon>
       </v-btn>
