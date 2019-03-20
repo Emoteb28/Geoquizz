@@ -36,8 +36,8 @@ class PhotoController extends Controller {
                 $photo->lat = filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
                 $photo->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
                 $photo->url = $name;
-                /* $serie = Serie::where('id','=',$args['id'])->firstOrFail();
-                $photo->serie()->associate($serie); */
+                $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+                $photo->serie()->associate($serie);
                 
                 // Create photo
                 if($photo->save()) {
