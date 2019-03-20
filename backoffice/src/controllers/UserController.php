@@ -110,7 +110,8 @@ class UserController extends Controller {
                                                 $secret, 'HS512' );
 
                         $data = [
-                            "token" => $token
+                            "token" => $token,
+                            "user" => $user
                         ];
 
                         return $this->jsonOutup($resp, 201, $data);

@@ -1,6 +1,6 @@
 <template>
-  <v-card height="200px">
-    <v-bottom-nav x12 sm3
+  <v-card height="56">
+    <v-bottom-nav
       :active.sync="bottomNav"
       :color="color"
       :value="true"
@@ -8,17 +8,20 @@
       dark
       shift
     >
-      <v-btn dark>
+      <v-btn dark to="/series">
         <span>Gestion des séries</span>
-        <v-icon>mid-city</v-icon>
+        <v-icon>home</v-icon>
       </v-btn>
 
-      <v-btn dark>
+
+
+      <v-btn dark >
         <span>Paramétres de partie</span>
-        <v-icon></v-icon>
+        <v-icon>build</v-icon>
       </v-btn>
-      <v-flex xs12 sm4>
-            <v-btn flat icon color="dark">
+      <v-flex xs1 sm1>
+            <v-btn flat icon color="dark" to="/logout">
+              <span>Deconnexion</span>
               <v-icon>logout</v-icon>
             </v-btn>
       </v-flex>
@@ -31,57 +34,6 @@
 <script>
   export default {
     data: () => ({
-      ecosystem: [
-        {
-          text: 'vuetify-loader',
-          href: 'https://github.com/vuetifyjs/vuetify-loader'
-        },
-        {
-          text: 'github',
-          href: 'https://github.com/vuetifyjs/vuetify'
-        },
-        {
-          text: 'awesome-vuetify',
-          href: 'https://github.com/vuetifyjs/awesome-vuetify'
-        }
-      ],
-      importantLinks: [
-        {
-          text: 'Documentation',
-          href: 'https://vuetifyjs.com'
-        },
-        {
-          text: 'Chat',
-          href: 'https://community.vuetifyjs.com'
-        },
-        {
-          text: 'Made with Vuetify',
-          href: 'https://madewithvuetifyjs.com'
-        },
-        {
-          text: 'Twitter',
-          href: 'https://twitter.com/vuetifyjs'
-        },
-        {
-          text: 'Articles',
-          href: 'https://medium.com/vuetify'
-        }
-      ],
-      whatsNext: [
-        {
-          text: 'Explore components',
-          href: 'https://vuetifyjs.com/components/api-explorer'
-        },
-        {
-          text: 'Select a layout',
-          href: 'https://vuetifyjs.com/layout/pre-defined'
-        },
-        {
-          text: 'Frequently Asked Questions',
-          href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions'
-        }
-
-      ],
       bottomNav: 3
 
     }),

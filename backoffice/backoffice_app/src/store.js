@@ -11,43 +11,111 @@ export default new Vuex.Store({
     rtoken: localStorage.getItem('token') || null,
     listSeries: localStorage.getItem('listSeries') || null,
     user: localStorage.getItem('user') || null,
-    photo: localStorage.getItem('photo') || null,    
+    photo: localStorage.getItem('photo') || null,
+    listPhotoSerie: localStorage.getItem('listPhotoSerie') || null,
+    serieC: localStorage.getItem('serieC') || null
   },
-  getters : {  
-    getSeries(state){
+  getters: {
+    getSeries(state) {
       return state.listSeries || null
+    },
+    getPhotoSerie(state) {
+      return state.listPhotoSerie || null
+    },
+    createdSerie(state) {
+      return state.serieC || null
+    },
+    createdPhoto(state) {
+      return state.photo || null
+    },
+    getUser(state) {
+      return state.user || null
+      console.log(state.user)
     }
   },
   mutations: {
     retrieveToken(state, rtoken) {
       state.token = rtoken
     },
-    retrieveSeries(state, listSeries){
+    retrieveSeries(state, listSeries) {
       state.listSeries = listSeries
+    },
+    retrievePhotoSerie(state, listPhotoSerie) {
+      state.listPhotoSerie = listPhotoSerie
+    },
+    createSerie(state, createdSerie) {
+      state.serieC = serieC
+    },
+    destroyToken(state) {
+      state.token = null
+    },
+    createPhoto(state, photo) {
+      state.photo = photo
     }
   },
   actions: {
+    // createPhotoS(context, data) {
+    //   return new Promise((resolve, reject) => {
+    //     axios.post('series/' + this.$route.params.id + '/photos/', {
+    //       name: data.name,
+    //       description: data.description,
+    //       acteurs: data.acteurs,
+    //       annee: data.annee,
+    //       disponible: data.disponible,
+    //     }).then(response => {
+    //       const film_id = response.data.createdFilm._id
+
+    //       localStorage.setItem('createdFilm_id', film_id)
+    //       context.commit('createFilm', film_id)
+    //       resolve(response)
+    //       //console.log(response);
+    //     })
+    //       .catch(error => {
+    //         reject(error)
+    //       })
+    //   })
+    // },
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
-        axios.post('login',{}, {
+        axios.post('login', {}, {
           auth:
           {
             username: credentials.email,
-            password: credentials.password  
+            password: credentials.password
           }
         })
           .then(response => {
             const rtoken = response.data.token
+            const user = response.data.user
             localStorage.setItem('token', rtoken)
+            localStorage.setItem('user', user)
             context.commit('retrieveToken', rtoken)
-            resolve(response)            
-            
+            resolve(response)
+
             // context.commit('addTodo', response.data)
           })
           .catch(error => {
             // console.log(error)
-            alert(error)       
+            alert(error)
+            reject(error)
+          })
+      })
+    },
+    register(context, credentials) {
+      return new Promise((resolve, reject) => {
+        axios.post('register', {
+          email: credentials.email,
+          password: credentials.password,
+          fullname: credentials.fullname
+        })
+          .then(response => {
+            resolve(response)
+
+            // context.commit('addTodo', response.data)
+          })
+          .catch(error => {
+            alert(error)
             reject(error)
           })
       })
@@ -58,13 +126,53 @@ export default new Vuex.Store({
         axios.get('series').then(response => {
           const listSeries = response.data.series
           context.commit('retrieveSeries', listSeries)
-          console.log(response);
+          resolve(response)
+
         })
-        .catch(error => {
+          .catch(error => {
             alert(error)
             reject(error)
-        })
+          })
       })
-    }
+    },
+    retrievePhotoSerie(context, credentials) {
+      return new Promise((resolve, reject) => {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.rtoken
+        axios.get('/series/' + credentials.id + '/photos').then(response => {
+          // console.log(response);
+          const listPhotoSerie = response.data.photos
+          context.commit('retrievePhotoSerie', listPhotoSerie)
+          resolve(response)
+        })
+          .catch(error => {
+            alert(error)
+            reject(error)
+          })
+      })
+    },
+    createSerie(context, data) {
+      return new Promise((resolve, reject) => {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.rtoken
+        axios.post('/series', {
+          ville: data.city,
+          lat: data.lat,
+          lng: data.lon,
+          dist: data.dist,
+        })
+          .then(response => {
+            const serieC = response.data.city
+            resolve(response)
+            //console.log(response);
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    logout(context) {
+      if (this.state.rtoken != null) {
+        context.commit('destroyToken')
+      }
+    },
   }
 })
