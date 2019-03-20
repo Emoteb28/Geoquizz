@@ -57,7 +57,7 @@ export default new Vuex.Store({
      createPhotoS(context, data) {
        return new Promise((resolve, reject) => {
         axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.rtoken
-         axios.post('photos/', data.fd ).then(response => {
+         axios.post('series/'+data.id+'/photos/', data.fd ).then(response => {
 
           resolve(response)
           //console.log(response);

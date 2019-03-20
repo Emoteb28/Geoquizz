@@ -63,10 +63,11 @@ export default {
       fd.append('lng', this.lon)
 
       this.$store.dispatch("createPhotoS", {
-          fd: fd
+          fd: fd,
+          id: this.$route.params.id
         })
         .then(response => {        
-            this.$router.push({ name: 'login' })
+            this.$router.push({ name: 'series' })
         });
     }
   }
