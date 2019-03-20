@@ -102,7 +102,7 @@ $app->get('/series[/]',
 /**
  * Creation de photo
  */
-$app->post('/photos[/]',
+$app->post('/series/{id}/photos[/]',
 
     \gq\controllers\PhotoController::class . ':createPhoto'
 
@@ -113,7 +113,7 @@ $app->post('/photos[/]',
 /**
  * set photo to serie
  */
-$app->post('/series/{id}/photos[/]',
+$app->patch('/series/{id}/photos[/]',
 
     \gq\controllers\PhotoController::class . ':setPhotoToSerie'
 

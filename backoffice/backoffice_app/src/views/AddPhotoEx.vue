@@ -9,7 +9,6 @@
 
           <v-flex xs10>
             <v-text-field
-              @tap="login"
               name="lon"
               label="Longitude"
               id="lon"
@@ -20,7 +19,6 @@
           </v-flex>
           <v-flex xs10>
             <v-text-field
-              @tap="login"
               name="desc"
               label="Description"
               id="desc"
@@ -48,9 +46,29 @@ import axios from "axios";
 
 export default {
   data: () => ({
-
+    file: "",
+    desc: "",
+    lon: "",
+    lat: ""
   }),
   methods: {
+    selectFile(){
+            this.file = this.$refs.file.files[0];
+    },
+    sendFile() {
+      let fd= new FormData();
+      fd.append('image', this.file)
+      fd.append('desc', this.desc)
+      fd.append('lat', this.lat)
+      fd.append('lng', this.lon)
+
+      this.$store.dispatch("createPhotoS", {
+          fd: fd
+        })
+        .then(response => {        
+            this.$router.push({ name: 'login' })
+        });
+    }
   }
 };
 </script>

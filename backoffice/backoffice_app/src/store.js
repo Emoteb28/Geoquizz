@@ -54,27 +54,19 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    // createPhotoS(context, data) {
-    //   return new Promise((resolve, reject) => {
-    //     axios.post('series/' + this.$route.params.id + '/photos/', {
-    //       name: data.name,
-    //       description: data.description,
-    //       acteurs: data.acteurs,
-    //       annee: data.annee,
-    //       disponible: data.disponible,
-    //     }).then(response => {
-    //       const film_id = response.data.createdFilm._id
+     createPhotoS(context, data) {
+       return new Promise((resolve, reject) => {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.rtoken
+         axios.post('photos/', data.fd ).then(response => {
 
-    //       localStorage.setItem('createdFilm_id', film_id)
-    //       context.commit('createFilm', film_id)
-    //       resolve(response)
-    //       //console.log(response);
-    //     })
-    //       .catch(error => {
-    //         reject(error)
-    //       })
-    //   })
-    // },
+          resolve(response)
+          //console.log(response);
+        })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {

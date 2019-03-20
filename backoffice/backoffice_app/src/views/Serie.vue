@@ -21,10 +21,31 @@
 </template>
 
 <script>
+import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+
 export default {
   name: "Serie",
-
-  data: () => ({}),
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker
+  },
+  data: () => ({
+    zoom: 13,
+      center: L.latLng(
+        48.31231,
+        6.321324
+      ),
+      url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+      attribution:
+        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      marker: L.latLng(
+        48.31231,
+        6.321324
+      ),
+      drag: true,
+      interval: false
+  }),
   created() {
     this.$store.dispatch("retrievePhotoSerie", { id: this.$route.params.id });
   },
