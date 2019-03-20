@@ -2,20 +2,14 @@
   <v-form @submit.prevent="sendFile" enctype="multipart/form-data">
     <v-container>
       <v-layout>
-        <v-flex xs12 md4>
-          <v-flex xs12>
-            <v-text-field name="lat" label="Latitude" id="lat" v-model="lat" type="text" required></v-text-field>
-          </v-flex>
-
+        <v-flex xs12 md12>
           <v-flex xs10>
-            <v-text-field
-              name="lon"
-              label="Longitude"
-              id="lon"
-              v-model="lon"
-              type="text"
-              required
-            ></v-text-field>
+            <div id="map">
+              <l-map :zoom="zoom" :center="center">
+                <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+                <l-marker :lat-lng.sync="marker" :draggable="drag"></l-marker>
+              </l-map>
+            </div>
           </v-flex>
           <v-flex xs10>
             <v-text-field
@@ -27,7 +21,6 @@
               required
             ></v-text-field>
           </v-flex>
-          <v-progress-linear v-model="progress"></v-progress-linear>
 
           <input type="file" @change="selectFile" ref="file">
 
@@ -43,33 +36,64 @@
 
 <script>
 import axios from "axios";
+import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 
 export default {
   data: () => ({
     file: "",
     desc: "",
     lon: "",
-    lat: ""
+    lat: "",
+    zoom: 13,
+    center: L.latLng(48.321231, 6.321534),
+    url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+    attribution:
+      '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    marker: L.latLng(48.321231, 6.321534),
+    drag: true,
+    interval: false
   }),
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker
+  },
   methods: {
-    selectFile(){
-            this.file = this.$refs.file.files[0];
+    selectFile() {
+      this.file = this.$refs.file.files[0];
     },
     sendFile() {
-      let fd= new FormData();
-      fd.append('image', this.file)
-      fd.append('desc', this.desc)
-      fd.append('lat', this.lat)
-      fd.append('lng', this.lon)
+      
+      let fd = new FormData();
+      fd.append("image", this.file);
+      fd.append("desc", this.desc);
+      fd.append("lat", this.marker.lat);
+      fd.append("lng", this.marker.lng);
 
-      this.$store.dispatch("createPhotoS", {
+      this.$store
+        .dispatch("createPhotoS", {
           fd: fd,
           id: this.$route.params.id
         })
-        .then(response => {        
-            this.$router.push({ name: 'series' })
+        .then(response => {
+          this.$router.push({ name: "series" });
         });
     }
   }
 };
 </script>
+
+
+<style scoped>
+#map {
+  height: 50vh;
+  max-width: 100%;
+  margin: auto;
+  padding: 0;
+  border-radius: 5%;
+}
+
+
+
+
+</style>

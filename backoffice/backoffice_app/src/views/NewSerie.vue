@@ -6,9 +6,13 @@
         <v-form @submit.prevent="createSerie" ref="form">
           <v-text-field v-model="city" label="Ville" required></v-text-field>
 
-          <v-text-field v-model="lat" label="Latitude" required></v-text-field>
+          <div id="map">
+              <l-map :zoom="zoom" :center="center">
+                <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+                <l-marker :lat-lng.sync="marker" :draggable="drag"></l-marker>
+              </l-map>
+            </div>
 
-          <v-text-field v-model="lon" label="Longitude" required></v-text-field>
           <v-text-field v-model="dist" label="Distance" required></v-text-field>
 
           <v-btn color="success" type="submit">Envoyer</v-btn>
@@ -25,11 +29,9 @@ import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 export default {
   data: () => ({
     city: "",
-    lat: null,
-    lon: null,
     dist: null,
     zoom: 13,
-    center: L.latLng(30, 30),
+    center: L.latLng(48.354654, 6.3214534),
     url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -87,4 +89,15 @@ export default {
   margin: 0;
   padding: 0;
 }
+
+#map {
+  height: 50vh;
+  max-width: 100%;
+  margin: auto;
+  padding: 0;
+  border-radius: 5%;
+}
+
+
+
 </style>

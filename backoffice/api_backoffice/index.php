@@ -145,6 +145,20 @@ $app->get('/series/{id}/photos[/]',
   \gq\middlewares\Token::class . ':checkJwt'
 );
 
+
+/**
+ * photos
+ * Toutes les photos 
+ */
+
+$app->get('/photos[/]',
+
+    \gq\controllers\PhotoController::class . ':getAllPhotos'
+
+)->add(
+  \gq\middlewares\Token::class . ':checkJwt'
+);
+
 /**
  * Run
  */

@@ -103,7 +103,7 @@ class UserController extends Controller {
 
                         $token = JWT::encode( [ 'iss'=>'http://api.backoffice.local',
                                                 'aud'=>'http://api.backoffice.local',
-                                                'iat'=>time(), 'exp'=>time()+3600,
+                                                'iat'=>time(), 'exp'=>time()+9999999,
                                                 'uid' => $user->id,
                                                 'umail' => $user->email,
                                                 'lvl' => 1 ],

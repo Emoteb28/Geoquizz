@@ -141,6 +141,32 @@ class PhotoController extends Controller {
         }catch(\Exception $e){
         }
     }
+
+
+    /**
+     * Serie
+     * Toutes les series
+     * @param $req
+     * @param $resp
+     * @param $args
+     */
+    public function getAllPhotos($req, $resp, $args){
+        try{
+            $photos = Photo::Select()->where('serie_id','=',null)->get();
+            $total = $photos->count();
+            $data = [
+                'type' => 'collection',
+                'date' =>date('d-m-Y'),
+                'count' => $total,
+                'photos' => $photos->toArray()
+            ];
+            return $this->jsonOutup($resp, 200, $data);
+            
+        }catch(\Exception $e){
+        }
+    }
+
+
     /**
      * Les photos par ID
      * @param $req
