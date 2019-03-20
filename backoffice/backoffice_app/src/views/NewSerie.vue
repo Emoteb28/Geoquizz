@@ -35,7 +35,7 @@ export default {
     url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    marker: L.latLng(30, 30),
+    marker: L.latLng(48.354654, 6.3214534),
     drag: true,
     photoIndex: 0,
     time: 0,
@@ -47,8 +47,8 @@ export default {
       this.$store
         .dispatch("createSerie", {
           city: this.city,
-          lat: this.lat,
-          lon: this.lon,
+          lat: this.marker.lat,
+          lng: this.marker.lng,
           dist: this.dist
         })
         .then(response => {

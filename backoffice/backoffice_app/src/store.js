@@ -148,7 +148,7 @@ export default new Vuex.Store({
         axios.post('/series', {
           ville: data.city,
           lat: data.lat,
-          lng: data.lon,
+          lng: data.lng,
           dist: data.dist,
         })
           .then(response => {
