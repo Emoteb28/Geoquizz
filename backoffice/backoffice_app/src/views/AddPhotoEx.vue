@@ -25,7 +25,7 @@
           <input type="file" @change="selectFile" ref="file">
 
           <div>
-            <v-btn type="submit" depressed color="primary">Primary</v-btn>
+            <v-btn type="submit" depressed color="primary">Ajouter</v-btn>
           </div>
         </v-flex>
       </v-layout>
