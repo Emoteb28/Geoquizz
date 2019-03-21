@@ -14,7 +14,8 @@ export default new Vuex.Store({
     photo: false,
     listPhotoSerie: false,
     serieC: false,
-    serie: false
+    serie: false,
+    photosNull: false 
   },
   getters: {
     getSeries(state) {
@@ -25,6 +26,9 @@ export default new Vuex.Store({
     },
     getPhotoSerie(state) {
       return state.listPhotoSerie || false
+    },
+    getPhotosNull(state) {
+      return state.photosNull || false
     },
     createdSerie(state) {
       return state.serieC || false
@@ -42,6 +46,9 @@ export default new Vuex.Store({
     },
     retrieveSeries(state, listSeries) {
       state.listSeries = listSeries
+    },
+    retrievePhotosNull(state, photosNull) {
+      state.photosNull = photosNull
     },
     retrieveSerie(state, serie) {
       state.serie = serie
@@ -140,6 +147,21 @@ export default new Vuex.Store({
           })
       })
     },
+    retrievePhotosNull(context, credentials) {
+      return new Promise((resolve, reject) => {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.token
+        axios.get('photos').then(response => {
+          const photos = response.data.photos
+          context.commit('retrievePhotosNull', photos)
+          resolve(response)
+
+        })
+          .catch(error => {
+            alert(error)
+            reject(error)
+          })
+      })
+    },
     retrieveSerie(context, data) {
       return new Promise((resolve, reject) => {
         axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.token
@@ -178,6 +200,41 @@ export default new Vuex.Store({
           lat: data.lat,
           lng: data.lng,
           dist: data.dist,
+        })
+          .then(response => {
+            const serieC = response.data.city
+            resolve(response)
+            //console.log(response);
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    updateSerie(context, data) {
+      return new Promise((resolve, reject) => {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.token
+        axios.patch('/series/'+data.id, {
+          ville: data.city,
+          lat: data.lat,
+          lng: data.lng,
+          dist: data.dist,
+        })
+          .then(response => {
+            const serieC = response.data.city
+            resolve(response)
+            //console.log(response);
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    addPhotoToSerie(context, data) {
+      return new Promise((resolve, reject) => {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.token
+        axios.patch('/series/'+data.id+'/photos', {
+          photo: data.photo
         })
           .then(response => {
             const serieC = response.data.city

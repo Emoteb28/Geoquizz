@@ -18,6 +18,9 @@
           <router-link tag="a" :to="path+Serie.id+'/photos'">
             <v-btn id="btnAff" flat>Afficher</v-btn>
           </router-link>
+          <router-link tag="a" :to="'settings/'+Serie.id">
+            <v-btn id="btnAff" flat>Settings</v-btn>
+          </router-link>
         </v-card-actions>
       </v-card>
     </v-flex>

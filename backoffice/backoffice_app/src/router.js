@@ -6,7 +6,10 @@ import Serie from './views/Serie.vue'
 import NewSerie from './views/NewSerie.vue'
 import Logout from './views/Logout.vue'
 import AddPhotoEx from './views/AddPhotoEx.vue'
+import AddPhotos from './views/addPhotos.vue'
 import Register from './views/Register.vue'
+import Settings from './views/Settings.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -39,15 +42,25 @@ export default new Router({
       component : Logout
     },
     {
-
       path : '/addPhotoEx/:id',
       name : 'addPhotoEx',
       component : AddPhotoEx
     },
     {
+      path : '/addPhotos/:id',
+      name : 'addPhotos',
+      component : AddPhotos
+    },
+    {
       path: '/register',
       name: 'register',
       component : Register
+    },
+    {
+
+      path : '/settings/:id',
+      name : 'settings',
+      component : Settings
     }
   ]
 })

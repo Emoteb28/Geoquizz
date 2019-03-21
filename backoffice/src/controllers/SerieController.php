@@ -10,7 +10,7 @@ use gq\models\Photo;
 class SerieController extends Controller {
 
     /**
-     * Creation commande
+     * Creation serie
      * @param $req
      * @param $resp
      * @param $args
@@ -52,6 +52,62 @@ class SerieController extends Controller {
                 $data = ['type' => 'resource',
                 'meta' => ['date' =>date('d-m-Y')],
                 'message' => 'serie Not Created'
+                ];
+
+                return $this->jsonOutup($resp, 400, $data);
+            
+        }
+    
+        }catch(\Exception $e){
+
+
+        }
+    }
+
+    /**
+     * update serie
+     * @param $req
+     * @param $resp
+     * @param $args
+     * @return mixed|void
+     */
+
+    public function updateSerie($req, $resp, $args){
+
+        try{
+
+            //------
+
+            $jsonData = $req->getParsedBody();
+
+            if (!isset($jsonData['ville'])) return $resp->withStatus(400);
+            if (!isset($jsonData['lat'])) return $resp->withStatus(400);
+            if (!isset($jsonData['lng'])) return $resp->withStatus(400); 
+            if (!isset($jsonData['dist'])) return $resp->withStatus(400); 
+
+            $serie = Serie::where('id','=',$args['id'])->firstOrFail();
+
+            $serie->ville = filter_var($jsonData['ville'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $serie->lat = filter_var($jsonData['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $serie->lng = filter_var($jsonData['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $serie->dist = (int) filter_var($jsonData['dist'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+            // Create serie
+            if($serie->save()) {
+
+                $data = [
+                    'type' => 'resource',
+                    'meta' => ['date' =>date('d-m-Y')],
+                    'serie' => $serie->toArray()
+                ];
+
+                return $this->jsonOutup($resp, 201, $data);
+
+            }else {
+
+                $data = ['type' => 'resource',
+                'meta' => ['date' =>date('d-m-Y')],
+                'message' => 'serie Not updated'
                 ];
 
                 return $this->jsonOutup($resp, 400, $data);

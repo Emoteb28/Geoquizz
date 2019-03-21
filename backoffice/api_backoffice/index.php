@@ -73,7 +73,18 @@ $app->post('/series[/]',
 
 )->add(
     \gq\middlewares\Token::class . ':checkJwt'
-);;
+);
+
+/**
+ * update de serie
+ */
+$app->patch('/series/{id}[/]',
+
+    \gq\controllers\SerieController::class . ':updateSerie'
+
+)->add(
+    \gq\middlewares\Token::class . ':checkJwt'
+);
 
 /**
  * Recuperer une serie par son identifiant

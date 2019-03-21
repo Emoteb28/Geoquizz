@@ -2,7 +2,7 @@
   <div>
     <h1 class="center">{{Serie.ville}}</h1>
     <v-flex xs12 sm12 md12 lg12 class="center">
-      <router-link tag="a" to>
+      <router-link tag="a" :to="'/addPhotos/' + this.$route.params.id">
         <v-btn id="btnAff" flat>Ajouter une photo</v-btn>
       </router-link>
       <router-link tag="a" :to="'/addPhotoEx/' + this.$route.params.id">
