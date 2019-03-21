@@ -20,6 +20,11 @@ export default {
     return {
       //
     }
-  }
+  },
+		mounted() {
+			if(!this.$store.state.token){
+				this.$router.push('/login');
+      }
+    }
 }
 </script>

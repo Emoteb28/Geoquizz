@@ -16,10 +16,18 @@ Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 });
 
+store.subscribe((mutation, state) => {
+  localStorage.setItem('store', JSON.stringify(state));
+});
+
+
 Vue.config.productionTip = false
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  beforeCreate() {
+    this.$store.commit('initialiseStore');
+  }
 }).$mount('#app')

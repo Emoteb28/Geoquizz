@@ -17,12 +17,6 @@
             <v-layout row wrap align-center justify-center>
                 <v-flex xs12 sm6>
                     <v-card class="elevation-8">
-                        <!-- ERROR MESSAGE -->
-                        <v-layout row v-if="error">
-                            <v-flex xs12 sm6 offset-sm3>
-                                <app-alert @dismissed="onDismissed" :text="error.message"> </app-alert>
-                            </v-flex>
-                        </v-layout>
 
                         <!-- Login/Signin -->
                         <v-layout row align-center justify-center class="py-5">
@@ -41,14 +35,14 @@
 
                                 <v-flex xs12 class="py-3">
                                     <div class="text-xs-center">
-                                        <v-btn outline type="submit"  :loading="loading">
+                                        <v-btn outline type="submit" >
                                             Envoyé
                                             <v-icon right>lock_open</v-icon>
                                             <span slot="loader" class="custom-loader">
                                             <v-icon light>cached</v-icon>
                                         </span>
                                         </v-btn>
-                                                                               <v-btn outline   :loading="loading" to="/register">
+                                             <v-btn outline   to="/register">
                                             S'enregistrer
                                             <v-icon right>add</v-icon>
                                             <span slot="loader" class="custom-loader">
@@ -83,9 +77,8 @@ export default {
         password: this.password,
       })
         .then(response => {
-          if (this.$store.state.token != null) {
+          if (this.$store.state.token != false) {
             this.$router.push({ name: 'series' })
-            alert(this.$store.state.token)
           }
           
         })

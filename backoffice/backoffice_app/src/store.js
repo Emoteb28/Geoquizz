@@ -8,55 +8,68 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    rtoken: localStorage.getItem('token') || null,
-    listSeries: localStorage.getItem('listSeries') || null,
-    user: localStorage.getItem('user') || null,
-    photo: localStorage.getItem('photo') || null,
-    listPhotoSerie: localStorage.getItem('listPhotoSerie') || null,
-    serieC: localStorage.getItem('serieC') || null
+    token: false,
+    listSeries: false,
+    user: false,
+    photo: false,
+    listPhotoSerie: false,
+    serieC: false,
+    serie: false
   },
   getters: {
     getSeries(state) {
-      return state.listSeries || null
+      return state.listSeries || false
+    },
+    getSerie(state) {
+      return state.serie || false
     },
     getPhotoSerie(state) {
-      return state.listPhotoSerie || null
+      return state.listPhotoSerie || false
     },
     createdSerie(state) {
-      return state.serieC || null
+      return state.serieC || false
     },
     createdPhoto(state) {
-      return state.photo || null
+      return state.photo || false
     },
     getUser(state) {
-      return state.user || null
-      console.log(state.user)
+      return state.user || false
     }
   },
   mutations: {
-    retrieveToken(state, rtoken) {
-      state.token = rtoken
+    retrieveToken(state, token) {
+      state.token = token
     },
     retrieveSeries(state, listSeries) {
       state.listSeries = listSeries
+    },
+    retrieveSerie(state, serie) {
+      state.serie = serie
     },
     retrievePhotoSerie(state, listPhotoSerie) {
       state.listPhotoSerie = listPhotoSerie
     },
     createSerie(state, createdSerie) {
-      state.serieC = serieC
+      state.serieC = createdSerie
     },
     destroyToken(state) {
-      state.token = null
+      state.token = false
     },
     createPhoto(state, photo) {
       state.photo = photo
+    },
+  	initialiseStore(state){
+  		if(localStorage.getItem('store')) {
+  			this.replaceState(
+  				Object.assign(state,JSON.parse(localStorage.getItem('store')))
+  				);
+  		}
     }
   },
   actions: {
      createPhotoS(context, data) {
        return new Promise((resolve, reject) => {
-        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.rtoken
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.token
          axios.post('series/'+data.id+'/photos/', data.fd ).then(response => {
 
           resolve(response)
@@ -78,11 +91,11 @@ export default new Vuex.Store({
           }
         })
           .then(response => {
-            const rtoken = response.data.token
+            const token = response.data.token
             const user = response.data.user
-            localStorage.setItem('token', rtoken)
+            localStorage.setItem('token', token)
             localStorage.setItem('user', user)
-            context.commit('retrieveToken', rtoken)
+            context.commit('retrieveToken', token)
             resolve(response)
 
             // context.commit('addTodo', response.data)
@@ -114,7 +127,7 @@ export default new Vuex.Store({
     },
     retrieveSeries(context, credentials) {
       return new Promise((resolve, reject) => {
-        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.rtoken
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.token
         axios.get('series').then(response => {
           const listSeries = response.data.series
           context.commit('retrieveSeries', listSeries)
@@ -127,9 +140,24 @@ export default new Vuex.Store({
           })
       })
     },
+    retrieveSerie(context, data) {
+      return new Promise((resolve, reject) => {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.token
+        axios.get('series/'+data.id).then(response => {
+          const serie = response.data.serie
+          context.commit('retrieveSerie', serie)
+          resolve(response)
+
+        })
+          .catch(error => {
+            alert(error)
+            reject(error)
+          })
+      })
+    },
     retrievePhotoSerie(context, credentials) {
       return new Promise((resolve, reject) => {
-        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.rtoken
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.token
         axios.get('/series/' + credentials.id + '/photos').then(response => {
           // console.log(response);
           const listPhotoSerie = response.data.photos
@@ -144,7 +172,7 @@ export default new Vuex.Store({
     },
     createSerie(context, data) {
       return new Promise((resolve, reject) => {
-        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.rtoken
+        axios.defaults.headers['Authorization'] = 'Bearer ' + this.state.token
         axios.post('/series', {
           ville: data.city,
           lat: data.lat,
@@ -162,9 +190,7 @@ export default new Vuex.Store({
       })
     },
     logout(context) {
-      if (this.state.rtoken != null) {
         context.commit('destroyToken')
-      }
     },
   }
 })

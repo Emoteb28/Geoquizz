@@ -10,12 +10,6 @@
       <v-layout row wrap align-center justify-center>
         <v-flex xs12 sm6>
           <v-card class="elevation-8">
-            <!-- ERROR MESSAGE -->
-            <v-layout row v-if="error">
-              <v-flex xs12 sm6 offset-sm3>
-                <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
-              </v-flex>
-            </v-layout>
 
             <!-- Login/Signin -->
             <v-layout row align-center justify-center class="py-5">
@@ -56,7 +50,7 @@
 
                 <v-flex xs12 class="py-3">
                   <div class="text-xs-center">
-                    <v-btn outline :loading="loading" type="submit">S'enregistrer
+                    <v-btn outline  type="submit">S'enregistrer
                       <v-icon right>add</v-icon>
                       <span slot="loader" class="custom-loader">
                         <v-icon light>cached</v-icon>

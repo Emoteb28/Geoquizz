@@ -45,11 +45,11 @@ export default {
     lon: "",
     lat: "",
     zoom: 13,
-    center: L.latLng(48.321231, 6.321534),
+    center: L.latLng(48.354654, 6.324654),
     url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    marker: L.latLng(48.321231, 6.321534),
+    marker: L.latLng(48.354654, 6.324654),
     drag: true,
     interval: false
   }),
@@ -78,6 +78,16 @@ export default {
         .then(response => {
           this.$router.push({ name: "series" });
         });
+    }
+  },
+  created() {
+    this.$store.dispatch("retrieveSerie", { id: this.$route.params.id });
+    this.center = L.latLng(this.Serie.lat, this.Serie.lng);
+    this.marker = L.latLng(this.Serie.lat, this.Serie.lng);
+  },
+  computed: {
+    Serie() {
+      return this.$store.getters.getSerie;
     }
   }
 };

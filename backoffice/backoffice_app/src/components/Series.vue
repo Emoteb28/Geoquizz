@@ -40,6 +40,7 @@ export default {
     },
     Photos(){
       this.$store.getters.getSeries.forEach(element => {
+        
         let photo = [];
          photo.push(this.$store.dispatch("retrievePhotoSerie", { id: element.id }))
          console.log(photo)
