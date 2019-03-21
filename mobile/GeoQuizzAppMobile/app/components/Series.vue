@@ -13,9 +13,9 @@
                 >
                 <Label class="drawer-header" text="GeoQuizz" />
 
-                <Label class="drawer-item" text="SERIES" @tap="goToSeries" />
+                <Label class="drawer-item" color="red" text="SERIES" @tap="goToSeries" />
                 <Label class="drawer-item" text="CREATE SERIES" @tap="goToCreateSerie" />
-                <Label class="drawer-item" color="red" text="CREATE PHOTO"
+                <Label class="drawer-item"  text="CREATE PHOTO"
                     @tap="goToCreatephoto" />
                 <Label class="drawer-item" text="LOGOUT" @tap="goToLogin" />
             </StackLayout>
@@ -108,7 +108,7 @@
                     axios.defaults.headers.common["Authorization"] =
                         "Bearer " + this.token;
                     axios
-                        .get("http://7a1d673b.ngrok.io/series")
+                        .get("http://06098263.ngrok.io/series")
                         .then(response => {
                             //alert(response.data);
                             console.log(response.data);

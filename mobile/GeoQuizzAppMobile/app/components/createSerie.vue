@@ -99,7 +99,7 @@
                     axios.defaults.headers.common["Authorization"] =
                         "Bearer " + this.token;
                     axios
-                        .post("http://7a1d673b.ngrok.io/series", {
+                        .post("http://06098263.ngrok.io/series", {
                             ville: this.ville,
                             lat: this.lat,
                             lng: this.lon,
