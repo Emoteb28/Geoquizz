@@ -29,7 +29,7 @@
             <v-template>
               <FlexboxLayout flexDirection="row" class="list-group-item">
                 <Image
-                  :src="'http://06098263.ngrok.io/uploads/'+photo.url"
+                  :src="'http://7da64424.ngrok.io/uploads/'+photo.url"
                   class="thumb img-circle"
                 />
                 <Label :text="photo.desc" class="list-group-item-heading" style="width: 60%"/>
@@ -61,7 +61,7 @@ const Detail = {
       <Page>
         <ActionBar title="Detail"/>
         <StackLayout>
-        <Image :src="'http://06098263.ngrok.io/uploads/'+url"
+        <Image :src="'http://7da64424.ngrok.io/uploads/'+url"
                   class="thumb img-circle"
                 />
           <Button @tap="$modal.close" text="Close" />
@@ -112,7 +112,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios.defaults.headers.common["Authorization"] = "Bearer " + this.token;
         axios
-          .get("http://06098263.ngrok.io/series/" + this.id + "/photos")
+          .get("http://7da64424.ngrok.io/series/" + this.id + "/photos")
           .then(response => {
             console.log(response.data);
             this.photos = response.data.photos;

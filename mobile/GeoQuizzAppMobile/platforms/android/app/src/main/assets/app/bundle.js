@@ -168,12 +168,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var nativescript_geolocation__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(nativescript_geolocation__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var nativescript_background_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("nativescript-background-http");
 /* harmony import */ var nativescript_background_http__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(nativescript_background_http__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("tns-core-modules/ui/enums");
-/* harmony import */ var tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var nativescript_camera__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("nativescript-camera");
-/* harmony import */ var nativescript_camera__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(nativescript_camera__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var tns_core_modules_image_source__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("tns-core-modules/image-source");
-/* harmony import */ var tns_core_modules_image_source__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(tns_core_modules_image_source__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var tns_core_modules_ui_image__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("tns-core-modules/ui/image");
+/* harmony import */ var tns_core_modules_ui_image__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(tns_core_modules_ui_image__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("tns-core-modules/ui/enums");
+/* harmony import */ var tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var nativescript_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("nativescript-camera");
+/* harmony import */ var nativescript_camera__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(nativescript_camera__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var tns_core_modules_image_source__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("tns-core-modules/image-source");
+/* harmony import */ var tns_core_modules_image_source__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(tns_core_modules_image_source__WEBPACK_IMPORTED_MODULE_11__);
+//
+//
 //
 //
 //
@@ -263,6 +267,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["token"],
 
@@ -272,7 +277,7 @@ __webpack_require__.r(__webpack_exports__);
       lat: "",
       lon: "",
       locations: [],
-      saveToGallery: true,
+      saveToGallery: false,
       keepAspectRatio: true,
       width: 320,
       height: 240,
@@ -287,16 +292,18 @@ __webpack_require__.r(__webpack_exports__);
     onTakePictureTap: function onTakePictureTap(args) {
       let page = args.object.page;
       let that = this;
-      Object(nativescript_camera__WEBPACK_IMPORTED_MODULE_9__["requestPermissions"])().then(() => {
-        Object(nativescript_camera__WEBPACK_IMPORTED_MODULE_9__["takePicture"])({
+      Object(nativescript_camera__WEBPACK_IMPORTED_MODULE_10__["requestPermissions"])().then(() => {
+        Object(nativescript_camera__WEBPACK_IMPORTED_MODULE_10__["takePicture"])({
           width: that.width,
           height: that.height,
           keepAspectRatio: that.keepAspectRatio,
           saveToGallery: that.saveToGallery
         }).then(imageAsset => {
           that.cameraImage = imageAsset;
+          this.myImg = new tns_core_modules_ui_image__WEBPACK_IMPORTED_MODULE_8__["Image"]();
+          this.myImg.src = imageAsset;
+          this.getLocation();
           imageAsset.getImageAsync(function (nativeImage) {
-            this.myImg = nativeImage;
             let scale = 1;
             let actualWidth = 0;
             let actualHeight = 0;
@@ -321,73 +328,41 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     createPhoto() {
-      this.getLocation();
-      const format = 'jpeg';
-      let contentType = "image/".concat(format);
-      let savePath = file_system__WEBPACK_IMPORTED_MODULE_5__["knownFolders"].documents().path;
-      let fileName = 'img_' + new Date().getTime() + '.' + format;
-      let filePath = file_system__WEBPACK_IMPORTED_MODULE_5__["path"].join(savePath, fileName);
-      let imageSource = new tns_core_modules_image_source__WEBPACK_IMPORTED_MODULE_10__["ImageSource"]();
-      let img;
-      imageSource.fromAsset(this.cameraImage).then(res => {
-        img = res;
+      let session = nativescript_background_http__WEBPACK_IMPORTED_MODULE_7__["session"]("image-upload");
+      let request = {
+        url: 'http://7da64424.ngrok.io/photos',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': "Bearer " + this.token
+        }
+      };
+      var params = [{
+        name: "desc",
+        value: this.description
+      }, {
+        name: "lat",
+        value: this.lat.toString()
+      }, {
+        name: "lng",
+        value: this.lon.toString()
+      }, {
+        name: "image",
+        filename: this.myImg.src.android,
+        mimeType: 'image/jpeg'
+      }];
+      let task = session.multipartUpload(params, request);
+      task.on('error', e => {
+        console.log('error', e);
       });
-
-      if (img.saveToFile(filePath, format)) {
-        var session = nativescript_background_http__WEBPACK_IMPORTED_MODULE_7___default.a.session('image-upload');
-        var options = {
-          url: 'http://06098263.ngrok.io/photos',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/octet-stream',
-            'File-Name': fileName,
-            'Authorization': "Bearer " + this.token
-          },
-          description: '{ \'uploading\': ' + fileName + ' }'
-        };
-        var params = [{
-          name: "desc",
-          value: "value"
-        }, {
-          name: "lat",
-          value: "value"
-        }, {
-          name: "lng",
-          value: "value"
-        }, {
-          name: "image",
-          filename: filePath,
-          mimeType: contentType
-        }];
-        let task = session.multipartUpload(params, options);
-        task.on('progress', logEvent);
-        task.on('error', logEvent);
-        task.on('complete', logEvent);
-      }
-      /* return new Promise((resolve, reject) => {
-          axios.defaults.headers.common["Authorization"] =
-              "Bearer " + this.token;
-          axios
-              .post("http://06098263.ngrok.io/photos", {
-                  image: imageFile,
-                  desc: this.description,
-                  lat: this.lat,
-                  lng: this.lon
-              })
-              .then(response => {
-                  alert(response.data);
-                  resolve(response);
-              })
-              .catch(error => {
-                  reject(error);
-              });
-      }); */
-
+      task.on('complete', e => {
+        console.log('complete', JSON.stringify(e));
+      });
     },
 
     getLocation() {
       nativescript_geolocation__WEBPACK_IMPORTED_MODULE_6__["getCurrentLocation"]({
-        desiredAccuracy: tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_8__["Accuracy"].high,
+        desiredAccuracy: tns_core_modules_ui_enums__WEBPACK_IMPORTED_MODULE_9__["Accuracy"].high,
         maximumAge: 5000,
         timeout: 20000
       }).then(res => {
@@ -536,7 +511,7 @@ __webpack_require__.r(__webpack_exports__);
 
     login() {
       return new Promise((resolve, reject) => {
-        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("http://06098263.ngrok.io/login", {}, {
+        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("http://7da64424.ngrok.io/login", {}, {
           auth: {
             username: this.user.email,
             password: this.user.password
@@ -558,7 +533,7 @@ __webpack_require__.r(__webpack_exports__);
 
     register() {
       return new Promise((resolve, reject) => {
-        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("http://06098263.ngrok.io/register", {
+        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("http://7da64424.ngrok.io/register", {
           fullname: this.user.fullname,
           email: this.user.email,
           password: this.user.password
@@ -738,7 +713,7 @@ __webpack_require__.r(__webpack_exports__);
     getSeries() {
       return new Promise((resolve, reject) => {
         _axios_dist_axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common["Authorization"] = "Bearer " + this.token;
-        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://06098263.ngrok.io/series").then(response => {
+        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://7da64424.ngrok.io/series").then(response => {
           //alert(response.data);
           console.log(response.data);
           this.series = response.data.series;
@@ -882,7 +857,7 @@ __webpack_require__.r(__webpack_exports__);
     createSerie() {
       return new Promise((resolve, reject) => {
         _axios_dist_axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common["Authorization"] = "Bearer " + this.token;
-        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://06098263.ngrok.io/series", {
+        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://7da64424.ngrok.io/series", {
           ville: this.ville,
           lat: this.lat,
           lng: this.lon,
@@ -984,7 +959,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const Detail = {
   props: ['url'],
-  template: "\n    <Frame>\n      <Page>\n        <ActionBar title=\"Detail\"/>\n        <StackLayout>\n        <Image :src=\"'http://06098263.ngrok.io/uploads/'+url\"\n                  class=\"thumb img-circle\"\n                />\n          <Button @tap=\"$modal.close\" text=\"Close\" />\n        </StackLayout>\n      </Page>\n    </Frame>\n  "
+  template: "\n    <Frame>\n      <Page>\n        <ActionBar title=\"Detail\"/>\n        <StackLayout>\n        <Image :src=\"'http://7da64424.ngrok.io/uploads/'+url\"\n                  class=\"thumb img-circle\"\n                />\n          <Button @tap=\"$modal.close\" text=\"Close\" />\n        </StackLayout>\n      </Page>\n    </Frame>\n  "
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["token", "ville", "id"],
@@ -1040,7 +1015,7 @@ const Detail = {
     getPhotos() {
       return new Promise((resolve, reject) => {
         _axios_dist_axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common["Authorization"] = "Bearer " + this.token;
-        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://06098263.ngrok.io/series/" + this.id + "/photos").then(response => {
+        _axios_dist_axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://7da64424.ngrok.io/series/" + this.id + "/photos").then(response => {
           console.log(response.data);
           this.photos = response.data.photos;
           resolve(response);
@@ -1077,7 +1052,7 @@ exports = module.exports = __webpack_require__("../node_modules/css-loader/lib/c
 
 
 // module
-exports.push([module.i, ".action-bar[data-v-67410f3a] {\n  background-color: deepskyblue;\n}\n#bouton[data-v-67410f3a] {\n  color: deepskyblue;\n  background-color: deepskyblue;\n}\n.tabview.active[data-v-67410f3a] {\n  border-bottom-color: white;\n  border-bottom-width: 3;\n  margin: 0;\n  height: 50;\n}\n.tabviewText[data-v-67410f3a] {\n  margin-top: 15;\n  margin-bottom: 5;\n  font-size: 13;\n  color: #d8d2d2;\n  horizontal-align: center;\n}\n.tabviewText.active[data-v-67410f3a] {\n  margin-top: 0;\n  margin-bottom: 5;\n  font-weight: bold;\n  color: white;\n  vertical-align: center;\n}\n.navTab[data-v-67410f3a] {\n  background-color: deepskyblue;\n}\n.navTabview[data-v-67410f3a] {\n  background-color: blue;\n}\n.status-img[data-v-67410f3a] {\n  margin-top: 4;\n  margin-right: 20;\n  width: 30;\n  height: 30;\n}\n.btnP[data-v-67410f3a] {\n  background-color: deepskyblue;\n  border-radius: 20px;\n  width: 400px;\n  color: white;\n  margin-top: -30px;\n}\n.btnB[data-v-67410f3a] {\n  background-color: deepskyblue;\n  width: 100%;\n  color: white;\n}\n.status-profile[data-v-67410f3a] {\n  border-width: 1;\n  border-color: #ffffff;\n  background-color: #f1ebeb;\n  border-radius: 50%;\n  margin-top: 4;\n  margin-right: 15;\n  width: 30;\n  height: 30;\n}\n.status-title[data-v-67410f3a] {\n  color: white;\n  font-size: 18;\n  margin-left: 15;\n  margin-top: 8;\n  horizontal-align: left;\n  vertical-align: center;\n}\nActionBar[data-v-67410f3a] {\n  background-color: #53ba82;\n  color: #ffffff;\n}\n.title[data-v-67410f3a] {\n  text-align: left;\n  padding-left: 16;\n}\n.message[data-v-67410f3a] {\n  vertical-align: center;\n  text-align: center;\n  font-size: 20;\n  color: #333333;\n}\n.drawer-header[data-v-67410f3a] {\n  padding: 50 16 16 16;\n  margin-bottom: 16;\n  background-color: deepskyblue;\n  color: #ffffff;\n  font-size: 24;\n}\n.drawer-item[data-v-67410f3a] {\n  padding: 8 16;\n  color: #333333;\n  font-size: 16;\n}\n", ""]);
+exports.push([module.i, ".action-bar[data-v-67410f3a] {\n  background-color: deepskyblue;\n}\n#bouton[data-v-67410f3a] {\n  color: deepskyblue;\n  background-color: deepskyblue;\n}\n.tabview.active[data-v-67410f3a] {\n  border-bottom-color: white;\n  border-bottom-width: 3;\n  margin: 0;\n  height: 50;\n}\n.tabviewText[data-v-67410f3a] {\n  margin-top: 15;\n  margin-bottom: 5;\n  font-size: 13;\n  color: #d8d2d2;\n  horizontal-align: center;\n}\n.tabviewText.active[data-v-67410f3a] {\n  margin-top: 0;\n  margin-bottom: 5;\n  font-weight: bold;\n  color: white;\n  vertical-align: center;\n}\n.navTab[data-v-67410f3a] {\n  background-color: deepskyblue;\n}\n.navTabview[data-v-67410f3a] {\n  background-color: blue;\n}\n.progressbar[data-v-67410f3a] {\n  height: 50;\n  margin: 10;\n  border-radius: 10;\n  border-color: black;\n  border-width: 1;\n}\n.progressbar-value[data-v-67410f3a] {\n  background: #337ab7;\n}\n.status-img[data-v-67410f3a] {\n  margin-top: 4;\n  margin-right: 20;\n  width: 30;\n  height: 30;\n}\n.btnP[data-v-67410f3a] {\n  background-color: deepskyblue;\n  border-radius: 20px;\n  width: 400px;\n  color: white;\n  margin-top: -30px;\n}\n.btnB[data-v-67410f3a] {\n  background-color: deepskyblue;\n  width: 100%;\n  color: white;\n}\n.status-profile[data-v-67410f3a] {\n  border-width: 1;\n  border-color: #ffffff;\n  background-color: #f1ebeb;\n  border-radius: 50%;\n  margin-top: 4;\n  margin-right: 15;\n  width: 30;\n  height: 30;\n}\n.status-title[data-v-67410f3a] {\n  color: white;\n  font-size: 18;\n  margin-left: 15;\n  margin-top: 8;\n  horizontal-align: left;\n  vertical-align: center;\n}\nActionBar[data-v-67410f3a] {\n  background-color: #53ba82;\n  color: #ffffff;\n}\n.title[data-v-67410f3a] {\n  text-align: left;\n  padding-left: 16;\n}\n.message[data-v-67410f3a] {\n  vertical-align: center;\n  text-align: center;\n  font-size: 20;\n  color: #333333;\n}\n.drawer-header[data-v-67410f3a] {\n  padding: 50 16 16 16;\n  margin-bottom: 16;\n  background-color: deepskyblue;\n  color: #ffffff;\n  font-size: 24;\n}\n.drawer-item[data-v-67410f3a] {\n  padding: 8 16;\n  color: #333333;\n  font-size: 16;\n}\n", ""]);
 
 // exports
 
@@ -1358,18 +1333,10 @@ var render = function() {
                               ? "~/assets/images/category.png"
                               : ""
                         }
-                      }),
-                      _c("Label", {
-                        staticClass: "tabviewText",
-                        class: _vm.selectedTabview == 1 ? "active" : "",
-                        attrs: { row: "1" }
                       })
                     ],
                     1
                   ),
-                  _c("StackLayout", {
-                    attrs: { row: "2", orientation: "vertical", padding: "" }
-                  }),
                   _c(
                     "StackLayout",
                     {
@@ -2100,7 +2067,7 @@ var render = function() {
                                     staticClass: "thumb img-circle",
                                     attrs: {
                                       src:
-                                        "http://06098263.ngrok.io/uploads/" +
+                                        "http://7da64424.ngrok.io/uploads/" +
                                         photo.url
                                     }
                                   }),
@@ -4350,6 +4317,13 @@ module.exports = require("tns-core-modules/ui/frame");
 /***/ (function(module, exports) {
 
 module.exports = require("tns-core-modules/ui/frame/activity");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/image":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/image");
 
 /***/ }),
 

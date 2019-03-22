@@ -48,11 +48,11 @@
               class="navIcon"
               :src="selectedTabview==1?'~/assets/images/category.png':''"
             />
-            <Label :class="selectedTabview==1?'active':''" row="1" class="tabviewText"></Label>
+            
           </GridLayout>
-          <StackLayout row="2" orientation="vertical" padding></StackLayout>
 
           <StackLayout row="2" orientation="vertical" padding>
+            
             <Button
               class="btnP"
               row="4"
@@ -64,7 +64,9 @@
             <Image row="2" :src="cameraImage" id="image" stretch="aspectFit" margin="8"/>
           </StackLayout>
 
+
           <StackLayout row="3" orientation="vertical" padding>
+
             <TextField class="textF" v-model="description" hint="Enter description..."/>
 
             <Button row="5" class="btnB" text="Send to backend" @tap="createPhoto" padding="10"/>
@@ -84,7 +86,8 @@
     import Series from "./Series";
     import * as fs from "file-system";
     import * as geolocation from "nativescript-geolocation";
-    import bgHttpModule from 'nativescript-background-http';
+    import * as bghttp from "nativescript-background-http";
+    import { Image } from "tns-core-modules/ui/image";
     import {
         Accuracy
     } from "tns-core-modules/ui/enums";
@@ -103,7 +106,7 @@
                 lat: "",
                 lon: "",
                 locations: [],
-                saveToGallery: true,
+                saveToGallery: false,
                 keepAspectRatio: true,
                 width: 320,
                 height: 240,
@@ -127,9 +130,11 @@
                         }).then(
                             imageAsset => {
                                 that.cameraImage = imageAsset;
+                                this.myImg = new Image();
+                                this.myImg.src = imageAsset;
+                                this.getLocation();
                                 imageAsset.getImageAsync(function(
                                     nativeImage) {
-                                        this.myImg = nativeImage;
                                     let scale = 1;
                                     let actualWidth = 0;
                                     let actualHeight = 0;
@@ -168,66 +173,38 @@
                 );
             },
             createPhoto() {
-                this.getLocation();
-                const format = 'jpeg';
-                let contentType = `image/${format}`; 
-                let savePath = fs.knownFolders.documents().path;
-                let fileName = 'img_' + new Date().getTime() + '.' + format;
-                let filePath = fs.path.join( savePath, fileName )
-                let imageSource = new imageSourceModule.ImageSource();
                 
-                let img;
 
-                imageSource.fromAsset(this.cameraImage).then(res =>{
-                    img = res;
-                });
-
-                if ( img.saveToFile( filePath, format ) ) {
-                    var session = bgHttpModule.session('image-upload')
-                    
-                    var options = {
-                        url: 'http://06098263.ngrok.io/photos',
+                  let session = bghttp.session("image-upload");
+                  let request = {
+                        url: 'http://7da64424.ngrok.io/photos',
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/octet-stream',
-                            'File-Name': fileName,
+                            'Content-Type': 'multipart/form-data',
                             'Authorization': "Bearer " + this.token
-                        },
-                        description: '{ \'uploading\': ' + fileName + ' }'
+                        }
                     }
+  
 
                     var params = [
-                    { name: "desc", value: "value" },
-                    { name: "lat", value: "value" },
-                    { name: "lng", value: "value" },
-                    { name: "image", filename: filePath, mimeType: contentType }
+                    { name: "desc", value: this.description },
+                    { name: "lat", value: this.lat.toString() },
+                    { name: "lng", value: this.lon.toString() },
+                    { name: "image", filename: this.myImg.src.android, mimeType: 'image/jpeg' }
                     ];
 
-                    let task = session.multipartUpload(params, options)
+                    let task = session.multipartUpload(params, request);
 
-                    task.on('progress', logEvent)
-                    task.on('error', logEvent)
-                    task.on('complete', logEvent)
-                }
+                    task.on('error', e => {
+                      console.log('error', e);
+                    });
 
-                /* return new Promise((resolve, reject) => {
-                    axios.defaults.headers.common["Authorization"] =
-                        "Bearer " + this.token;
-                    axios
-                        .post("http://06098263.ngrok.io/photos", {
-                            image: imageFile,
-                            desc: this.description,
-                            lat: this.lat,
-                            lng: this.lon
-                        })
-                        .then(response => {
-                            alert(response.data);
-                            resolve(response);
-                        })
-                        .catch(error => {
-                            reject(error);
-                        });
-                }); */
+                    task.on('complete', e => {
+                      console.log('complete', JSON.stringify(e));
+                      
+                    });
+               
+               
             },
             getLocation() {
                 geolocation
@@ -282,7 +259,7 @@
                 this.$navigateTo(LoginPage);
             }
         }
-    };
+    }
 </script>
 
 <style scoped lang="scss">
@@ -325,6 +302,17 @@
 
 .navTabview {
   background-color: blue;
+}
+
+.progressbar {
+    height: 50;
+    margin: 10;
+    border-radius: 10;
+    border-color: black;
+    border-width: 1;
+}
+.progressbar-value {
+    background: #337ab7;
 }
 
 .status-img {

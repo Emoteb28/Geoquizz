@@ -108,7 +108,7 @@
                     axios.defaults.headers.common["Authorization"] =
                         "Bearer " + this.token;
                     axios
-                        .get("http://06098263.ngrok.io/series")
+                        .get("http://7da64424.ngrok.io/series")
                         .then(response => {
                             //alert(response.data);
                             console.log(response.data);

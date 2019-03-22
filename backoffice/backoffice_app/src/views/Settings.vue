@@ -63,15 +63,18 @@ export default {
     LMarker
   },
   created() {
-      this.$store.dispatch("retrieveSerie", { id: this.$route.params.id });
-      this.center = L.latLng(this.Serie.lat, this.Serie.lng);
-      this.marker = L.latLng(this.Serie.lat, this.Serie.lng);
-      this.dist = this.Serie.dist;
-      this.city = this.Serie.ville;
+      this.$store.dispatch("retrieveSerie", { id: this.$route.params.id })
+      .then(res => {
+        this.center = L.latLng(res.data.serie.lat, res.data.serie.lng);
+      this.marker = L.latLng(res.data.serie.lat, res.data.serie.lng);
+      this.dist = res.data.serie.dist;
+      this.city = res.data.serie.ville;
+      });
+      
   },
   computed: {
     Serie() {
-        
+      this.dist = 'test';
       return this.$store.getters.getSerie;
     }
   }

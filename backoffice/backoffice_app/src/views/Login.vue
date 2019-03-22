@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-parallax
+  <v-parallax id="ht"
     dark
     src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
   >
@@ -86,3 +86,7 @@ export default {
   }
 }
 </script> 
+
+<style >
+
+</style>

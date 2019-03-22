@@ -15,10 +15,10 @@
 
 
 
-      <v-btn dark to="/settings">
+      <!-- <v-btn dark to="/settings">
         <span>Paramétres de partie</span>
         <v-icon>build</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-flex xs1 sm1>
             <v-btn flat icon color="dark" to="/logout">
               <span>Deconnexion</span>

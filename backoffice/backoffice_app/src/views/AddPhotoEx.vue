@@ -81,9 +81,10 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("retrieveSerie", { id: this.$route.params.id });
-    this.center = L.latLng(this.Serie.lat, this.Serie.lng);
-    this.marker = L.latLng(this.Serie.lat, this.Serie.lng);
+    this.$store.dispatch("retrieveSerie", { id: this.$route.params.id }).then(res => {
+        this.center = L.latLng(res.data.serie.lat, res.data.serie.lng);
+      this.marker = L.latLng(res.data.serie.lat, res.data.serie.lng);
+      });
   },
   computed: {
     Serie() {

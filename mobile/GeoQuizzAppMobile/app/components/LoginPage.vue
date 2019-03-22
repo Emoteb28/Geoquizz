@@ -92,7 +92,7 @@
                 return new Promise((resolve, reject) => {
                     axios
                         .post(
-                            "http://06098263.ngrok.io/login", {}, {
+                            "http://7da64424.ngrok.io/login", {}, {
                                 auth: {
                                     username: this.user.email,
                                     password: this.user.password
@@ -118,7 +118,7 @@
             register() {
                 return new Promise((resolve, reject) => {
                     axios
-                        .post("http://06098263.ngrok.io/register", {
+                        .post("http://7da64424.ngrok.io/register", {
                             fullname: this.user.fullname,
                             email: this.user.email,
                             password: this.user.password
